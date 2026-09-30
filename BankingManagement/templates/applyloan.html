@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Apply Loan | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="form-box">
+
+
+        <!-- ===============================
+             LOGO
+        =============================== -->
+
+        <div class="logo">
+
+            <i class="fa-solid fa-building-columns"></i>
+
+            <h1>Secure Bank</h1>
+
+        </div>
+
+
+        <h2>Loan Application Form</h2>
+        <!-- ===============================
+     FLASH MESSAGES
+================================ -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <div class="flash-container">
+
+            {% for category, message in messages %}
+
+                <div class="flash-message
+                    {% if category == 'error' %}
+                        flash-error
+                    {% elif category == 'success' %}
+                        flash-success
+                    {% else %}
+                        flash-warning
+                    {% endif %}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+
+        <form action="{{ url_for('loan.applyloan') }}"
+              method="POST"
+              enctype="multipart/form-data"
+              id="loanForm">
+
+
+            <!-- ===============================
+                 LOAN TYPE
+            =============================== -->
+
+            <div class="form-control">
+
+                <label>Loan Type</label>
+
+                <select name="loan_type"
+                        id="loan_type"
+                        required
+                        onchange="showImageField()">
+
+                    <option value="">
+                        Select Loan Type
+                    </option>
+
+                    <option value="Home Loan">
+                        Home Loan
+                    </option>
+
+                    <option value="Education Loan">
+                        Education Loan
+                    </option>
+
+                    <option value="Personal Loan">
+                        Personal Loan
+                    </option>
+
+                    <option value="Vehicle Loan">
+                        Vehicle Loan
+                    </option>
+
+                    <option value="Business Loan">
+                        Business Loan
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ===============================
+                 LOAN AMOUNT
+            =============================== -->
+
+            <div class="form-control">
+
+                <label>Loan Amount</label>
+
+                <input type="number"
+                       name="loan_amount"
+                       placeholder="Enter Loan Amount"
+                       min="1"
+                       required>
+
+            </div>
+
+
+            <!-- ===============================
+                 MONTHLY INCOME
+            =============================== -->
+
+            <div class="form-control">
+
+                <label>Monthly Income</label>
+
+                <input type="number"
+                       name="monthly_income"
+                       placeholder="Enter Monthly Income"
+                       min="1"
+                       required>
+
+            </div>
+
+
+            <!-- ===============================
+                 CREDIT SCORE
+            =============================== -->
+
+            <div class="form-control">
+
+                <label>Credit Score</label>
+
+                <input type="number"
+                       name="credit_score"
+                       min="300"
+                       max="900"
+                       placeholder="Enter Credit Score"
+                       required>
+
+            </div>
+
+
+            <!-- ===============================
+                 EMPLOYMENT TYPE
+            =============================== -->
+
+            <div class="form-control">
+
+                <label>Employment Type</label>
+
+                <select name="employment_type"
+                        required>
+
+                    <option value="">
+                        Select Employment
+                    </option>
+
+                    <option value="Government">
+                        Government
+                    </option>
+
+                    <option value="Salaried">
+                        Salaried
+                    </option>
+
+                    <option value="Self Employed">
+                        Self Employed
+                    </option>
+
+                    <option value="Business">
+                        Business
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ===============================
+                 LOAN TERM
+            =============================== -->
+
+            <div class="form-control">
+
+                <label>Loan Term (Years)</label>
+
+                <select name="loan_term"
+                        required>
+
+                    <option value="">
+                        Select Loan Term
+                    </option>
+
+                    <option value="5">
+                        5 Years
+                    </option>
+
+                    <option value="10">
+                        10 Years
+                    </option>
+
+                    <option value="15">
+                        15 Years
+                    </option>
+
+                    <option value="20">
+                        20 Years
+                    </option>
+
+                    <option value="25">
+                        25 Years
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ===============================
+                 DOCUMENT TYPE
+            =============================== -->
+
+            <div class="form-control">
+
+                <label>Document Type</label>
+
+                <select name="document_type"
+                        id="document_type"
+                        required
+                        onchange="resetDocumentVerification()">
+
+                    <option value="">
+                        Select Document
+                    </option>
+
+                    <option value="Aadhaar">
+                        Aadhaar
+                    </option>
+
+                    <option value="PAN Card">
+                        PAN Card
+                    </option>
+
+                    <option value="Voter ID">
+                        Voter ID
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ===============================
+                 DOCUMENT UPLOAD
+            =============================== -->
+
+            <div class="form-control">
+
+                <label>Upload Document</label>
+
+
+                <div class="upload-box">
+
+
+                    <div class="upload-buttons">
+
+
+                        <!-- Choose File -->
+
+                        <button type="button"
+                                class="upload-btn"
+                                onclick="openDocumentFilePicker()">
+
+                            <i class="fa-solid fa-folder-open"></i>
+
+                            Choose File
+
+                        </button>
+
+
+                        <!-- Camera -->
+
+                        <button type="button"
+                                class="upload-btn camera-btn"
+                                onclick="openCamera('document')">
+
+                            <i class="fa-solid fa-camera"></i>
+
+                            Camera
+
+                        </button>
+
+
+                    </div>
+
+
+                    <input type="file"
+                           name="document"
+                           id="document"
+                           class="hidden-file-input"
+                           accept=".jpg,.jpeg,.png,.pdf"
+                           required
+                           onchange="handleDocumentSelection(event)">
+
+
+                    <div id="documentFileName"
+                         class="file-name">
+
+                        No document selected
+
+                    </div>
+
+
+                    <!-- Document Preview -->
+
+                    <div id="documentPreviewContainer"
+                         class="preview-container">
+
+                        <img id="documentPreview"
+                             alt="Document Preview">
+
+                    </div>
+
+
+                    <!-- Document Verification -->
+
+                    <div id="documentVerification"
+                         class="verification-status">
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- ===============================
+                 HOME / VEHICLE IMAGE
+            =============================== -->
+
+            <div class="form-control"
+                 id="propertyImageField">
+
+
+                <label id="propertyImageLabel">
+                    Property / Vehicle Image
+                </label>
+
+
+                <div class="upload-box">
+
+
+                    <div class="upload-buttons">
+
+
+                        <!-- Choose Image -->
+
+                        <button type="button"
+                                class="upload-btn"
+                                onclick="openPropertyFilePicker()">
+
+                            <i class="fa-solid fa-image"></i>
+
+                            Choose Image
+
+                        </button>
+
+
+                        <!-- Camera -->
+
+                        <button type="button"
+                                class="upload-btn camera-btn"
+                                onclick="openCamera('property')">
+
+                            <i class="fa-solid fa-camera"></i>
+
+                            Camera
+
+                        </button>
+
+
+                    </div>
+
+
+                    <input type="file"
+                           name="property_image"
+                           id="property_image"
+                           class="hidden-file-input"
+                           accept=".jpg,.jpeg,.png"
+                           onchange="handlePropertySelection(event)">
+
+
+                    <div id="propertyFileName"
+                         class="file-name">
+
+                        No image selected
+
+                    </div>
+
+
+                    <!-- Property Preview -->
+
+                    <div id="propertyPreviewContainer"
+                         class="preview-container">
+
+                        <img id="propertyPreview"
+                             alt="Property / Vehicle Preview">
+
+                    </div>
+
+
+                    <!-- Property Verification -->
+
+                    <div id="propertyVerification"
+                         class="verification-status">
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- ===============================
+                 BUTTONS
+            =============================== -->
+
+            <div class="button-group">
+
+
+                <button type="submit"
+                        class="save-btn"
+                        id="submitButton">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                    Apply Loan
+
+                </button>
+
+
+                <a href="{{ url_for('customer.dashboard') }}"
+                   class="cancel-btn">
+
+                    Back
+
+                </a>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+    <div class="footer">
+
+        © 2026 Secure Bank
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ==================================================
+     CAMERA MODAL
+================================================== -->
+
+<div id="cameraModal"
+     class="camera-modal">
+
+
+    <div class="camera-box">
+
+
+        <h3>
+
+            <i class="fa-solid fa-camera"></i>
+
+            Capture Image
+
+        </h3>
+
+
+        <video id="cameraVideo"
+               autoplay
+               playsinline>
+        </video>
+
+
+        <canvas id="cameraCanvas">
+        </canvas>
+
+
+        <div class="camera-message">
+
+            Keep the document/image straight, well-lit,
+            and fully visible.
+
+        </div>
+
+
+        <div class="camera-controls">
+
+
+            <button type="button"
+                    class="capture-btn"
+                    onclick="captureImage()">
+
+                <i class="fa-solid fa-camera"></i>
+
+                Capture
+
+            </button>
+
+
+            <button type="button"
+                    class="close-camera-btn"
+                    onclick="closeCamera()">
+
+                <i class="fa-solid fa-xmark"></i>
+
+                Close
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* ==================================================
+   GLOBAL VARIABLES
+================================================== */
+
+let cameraStream = null;
+
+let cameraTarget = null;
+
+
+/* ==================================================
+   LOAN TYPE IMAGE FIELD
+================================================== */
+
+function showImageField() {
+    const loanType =
+        document.getElementById("loan_type").value;
+    const imageField =
+        document.getElementById("propertyImageField");
+    const imageInput =
+        document.getElementById("property_image");
+    const imageLabel =
+        document.getElementById("propertyImageLabel");
+    if (loanType === "Home Loan") {
+        imageField.style.display = "block";
+        imageLabel.innerText =
+            "Property Image";
+        imageInput.required = true;
+    }
+    else if (loanType === "Vehicle Loan") {
+
+        imageField.style.display = "block";
+        imageLabel.innerText =
+            "Vehicle Image";
+        imageInput.required = true;
+    }
+    else {
+        imageField.style.display = "none";
+        imageInput.required = false;
+
+        imageInput.value = "";
+        document.getElementById(
+            "propertyFileName"
+        ).innerText = "No image selected";
+        document.getElementById(
+            "propertyPreviewContainer"
+        ).style.display = "none";
+
+        clearVerification(
+            "propertyVerification"
+        );
+    }
+}
+
+/* ==================================================
+   OPEN DOCUMENT FILE PICKER
+================================================== */
+function openDocumentFilePicker() {
+    document.getElementById("document").click();
+}
+
+/* ==================================================
+   OPEN PROPERTY FILE PICKER
+================================================== */
+function openPropertyFilePicker() {
+    document.getElementById("property_image").click();
+}
+
+/* ==================================================
+   DOCUMENT FILE SELECTION
+================================================== */
+function handleDocumentSelection(event) {
+    const file = event.target.files[0];
+    if (!file) {
+        return;
+    }
+    const extension =
+        file.name.split(".").pop().toLowerCase();
+    /* PDF */
+    if (extension === "pdf") {
+        document.getElementById(
+            "documentFileName"
+        ).innerText =
+            "Selected: " + file.name;
+        document.getElementById(
+            "documentPreviewContainer"
+        ).style.display = "none";
+        showVerification(
+            "documentVerification",
+            "success",
+            "✓ PDF document selected successfully.",
+            "PDF files do not require image-quality checking."
+        );
+
+        return;
+    }
+    /* Image */
+    if (
+        extension === "jpg" ||
+        extension === "jpeg" ||
+        extension === "png"
+    ) {
+        verifyImageFile(
+            file,
+            "document"
+        );
+        return;
+    }
+    showVerification(
+        "documentVerification",
+        "error",
+        "✕ Unsupported document format.",
+        "Please select JPG, JPEG, PNG or PDF."
+    );
+    event.target.value = "";
+}
+
+/* ==================================================
+   PROPERTY FILE SELECTION
+================================================== */
+function handlePropertySelection(event) {
+    const file = event.target.files[0];
+    if (!file) {
+        return;
+    }
+    verifyImageFile(
+        file,
+        "property"
+    );
+}
+
+/* ==================================================
+   IMAGE QUALITY VERIFICATION
+================================================== */
+function verifyImageFile(file, target) {
+    const verificationId =
+        target === "document"
+            ? "documentVerification"
+            : "propertyVerification";
+    const previewContainer =
+        target === "document"
+            ? "documentPreviewContainer"
+            : "propertyPreviewContainer";
+    const preview =
+        target === "document"
+            ? "documentPreview"
+            : "propertyPreview";
+    const fileName =
+        target === "document"
+            ? "documentFileName"
+            : "propertyFileName";
+    /* File size */
+    const maxSize =
+        10 * 1024 * 1024;
+    if (file.size > maxSize) {
+        showVerification(
+            verificationId,
+            "error",
+            "✕ File is too large.",
+            "Maximum allowed image size is 10 MB."
+        );
+        clearInput(target);
+        return;
+    }
+    /* Read image */
+    const reader =
+        new FileReader();
+    reader.onload = function(e) {
+        const img =
+            new Image();
+        img.onload = function() {
+            const width =
+                img.naturalWidth;
+            const height =
+                img.naturalHeight;
+            /*
+             Minimum resolution.
+             This prevents extremely small
+             or low-quality images.
+            */
+            if (
+                width < 800 ||
+                height < 600
+            ) {
+                showVerification(
+                    verificationId,
+                    "error",
+                    "✕ Image resolution is too low.",
+                    "Please upload/capture a clearer image with at least 800 × 600 pixels."
+                );
+                clearInput(target);
+                return;
+            }
+            /* Preview */
+            document.getElementById(
+                preview
+            ).src = e.target.result;
+            document.getElementById(
+                previewContainer
+            ).style.display = "block";
+            document.getElementById(
+                fileName
+            ).innerText =
+                "Selected: " + file.name;
+            /*
+             Analyze image quality
+            */
+            analyzeImageQuality(
+                img,
+                target,
+                verificationId
+            );
+        };
+
+        img.onerror = function() {
+            showVerification(
+                verificationId,
+                "error",
+                "✕ Unable to read the image.",
+                "Please select a valid JPG, JPEG or PNG image."
+            );
+            clearInput(target);
+        };
+
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+/* ==================================================
+   IMAGE ANALYSIS
+================================================== */
+function analyzeImageQuality(
+    img,
+    target,
+    verificationId
+) {
+    const canvas =
+        document.createElement("canvas");
+
+    /*
+     Resize analysis image for
+     faster browser processing.
+    */
+    const maxDimension = 600;
+    let width =
+        img.naturalWidth;
+    let height =
+        img.naturalHeight;
+    if (width > maxDimension) {
+        const ratio =
+            maxDimension / width;
+        width =
+            maxDimension;
+        height =
+            Math.round(
+                height * ratio
+            );
+    }
+    if (height > maxDimension) {
+        const ratio =
+            maxDimension / height;
+        height =
+            maxDimension;
+        width =
+            Math.round(
+                width * ratio
+            );
+    }
+    canvas.width = width;
+    canvas.height = height;
+    const ctx =
+        canvas.getContext("2d");
+    ctx.drawImage(
+        img,
+        0,
+        0,
+        width,
+        height
+    );
+    let imageData;
+    try {
+        imageData =
+            ctx.getImageData(
+                0,
+                0,
+                width,
+                height
+            );
+    }
+    catch(error) {
+        showVerification(
+            verificationId,
+            "warning",
+            "⚠ Image could not be fully analyzed.",
+            "Please select a clear image and try again."
+        );
+        return;
+    }
+    const data =
+        imageData.data;
+    let brightnessTotal = 0;
+    let darkPixels = 0;
+    let brightPixels = 0;
+    let pixelCount = 0;
+    /*
+     Calculate brightness.
+    */
+    for (
+        let i = 0;
+        i < data.length;
+        i += 4
+    ) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const brightness =
+            (
+                0.299 * r +
+                0.587 * g +
+                0.114 * b
+            );
+        brightnessTotal +=
+            brightness;
+        if (brightness < 35) {
+            darkPixels++;
+        }
+        if (brightness > 245) {
+            brightPixels++;
+        }
+        pixelCount++;
+
+    }
+    const averageBrightness =
+        brightnessTotal / pixelCount;
+    const darkPercentage =
+        (
+            darkPixels /
+            pixelCount
+        ) * 100;
+    const brightPercentage =
+        (
+            brightPixels /
+            pixelCount
+        ) * 100;
+    /*
+     Basic contrast / brightness check.
+    */
+    if (
+        averageBrightness < 55
+    ) {
+        showVerification(
+            verificationId,
+            "error",
+            "✕ Image is too dark.",
+            "Please capture the image in better lighting. Avoid shadows over the document/object."
+        );
+        clearInput(target);
+        return;
+    }
+    if (
+        averageBrightness > 235
+    ) {
+        showVerification(
+            verificationId,
+            "error",
+            "✕ Image is too bright.",
+            "Strong light or reflection may be hiding important details. Please capture again."
+        );
+        clearInput(target);
+        return;
+    }
+    /*
+     Large dark area = possible shadow.
+    */
+    if (
+        darkPercentage > 45
+    ) {
+        showVerification(
+            verificationId,
+            "error",
+            "✕ Strong shadow detected.",
+          "Please remove shadows and capture the image again."
+        );
+        clearInput(target);
+        return;
+    }
+    /*
+     Very large white area may indicate
+     strong reflection/overexposure.
+    */
+    if (
+        brightPercentage > 55
+    ) {
+        showVerification(
+            verificationId,
+            "error",
+            "✕ Excessive brightness detected.",
+            "Avoid direct flash or strong light and capture again."
+        );
+        clearInput(target);
+        return;
+    }
+    /*
+     Blur detection.
+     Uses a simple edge/variance-based
+     sharpness approximation.
+    */
+    const sharpness =
+        calculateSharpness(
+            imageData
+        );
+    /*
+     Threshold chosen for a browser-side
+     screening check.
+    */
+    if (
+        sharpness < 18
+    ) {
+        showVerification(
+            verificationId,
+            "error",
+            "✕ Image appears blurry.",
+            "Please capture a sharper and clearer image. Keep the camera steady."
+        );
+        clearInput(target);
+        return;
+    }
+
+    /*
+     Passed all checks.
+    */
+    showVerification(
+        verificationId,
+        "success",
+        "✓ Image verified successfully.",
+        "Resolution, brightness, shadow and sharpness checks passed."
+    );
+}
+
+/* ==================================================
+   SHARPNESS / BLUR CHECK
+================================================== */
+
+function calculateSharpness(imageData) {
+    const data =
+        imageData.data;
+    const width =
+        imageData.width;
+    const height =
+        imageData.height;
+    let sum = 0;
+    let sumSquared = 0;
+    let count = 0;
+    /*
+     Sample pixels instead of
+     processing every pixel.
+    */
+    const step = 4;
+    for (
+        let y = 1;
+        y < height - 1;
+        y += step
+    ) {
+        for (
+            let x = 1;
+            x < width - 1;
+            x += step
+        ) {
+            const currentIndex =
+                (
+                    y * width + x
+                ) * 4;
+            const leftIndex =
+                (
+                    y * width + (x - 1)
+                ) * 4;
+            const rightIndex =
+                (
+                    y * width + (x + 1)
+                ) * 4;
+            const topIndex =
+                (
+                    (y - 1) * width + x
+                ) * 4;
+            const bottomIndex =
+                (
+                    (y + 1) * width + x
+                ) * 4;
+            const current =
+                getGray(
+                    data,
+                    currentIndex
+                );
+            const left =
+                getGray(
+                    data,
+                    leftIndex
+                );
+            const right =
+                getGray(
+                    data,
+                    rightIndex
+                );
+            const top =
+                getGray(
+                    data,
+                    topIndex
+                );
+            const bottom =
+                getGray(
+                    data,
+                    bottomIndex
+                );
+            /*
+             Laplacian-like edge response.
+            */
+            const laplacian =
+                (
+                    4 * current
+                    - left
+                    - right
+                    - top
+                    - bottom
+                );
+            const value =
+                Math.abs(
+                    laplacian
+                );
+            sum += value;
+            sumSquared +=
+                value * value;
+            count++;
+        }
+    }
+    if (count === 0) {
+        return 0;
+    }
+    const mean =
+        sum / count;
+    const variance =
+        (
+            sumSquared / count
+        ) - (mean * mean);
+    return variance;
+}
+
+/* ==================================================
+   RGB → GRAYSCALE
+================================================== */
+function getGray(
+    data,
+    index
+) {
+    const r =
+        data[index];
+    const g =
+        data[index + 1];
+    const b =
+        data[index + 2];
+    return (
+        0.299 * r +
+        0.587 * g +
+        0.114 * b
+    );
+}
+
+/* ==================================================
+   VERIFICATION MESSAGE
+================================================== */
+function showVerification(
+    elementId,
+    type,
+    title,
+    details
+) {
+    const element =
+        document.getElementById(
+            elementId
+        );
+    element.className =
+        "verification-status " +
+        type;
+    element.innerHTML =
+        '<div>' +
+            '<span class="verification-icon">' +
+                title +
+            '</span>' +
+        '</div>' +
+        '<div class="quality-details">' +
+            details +
+        '</div>';
+}
+
+/* ==================================================
+   CLEAR VERIFICATION
+================================================== */
+function clearVerification(
+    elementId
+) {
+    const element =
+        document.getElementById(
+            elementId
+        );
+    element.className =
+        "verification-status";
+    element.innerHTML = "";
+}
+
+/* ==================================================
+   CLEAR FILE INPUT
+================================================== */
+
+function clearInput(target) {
+    if (
+        target === "document"
+    ) {
+        document.getElementById(
+            "document"
+        ).value = "";
+        document.getElementById(
+            "documentFileName"
+        ).innerText =
+            "No document selected";
+        document.getElementById(
+            "documentPreviewContainer"
+        ).style.display = "none";
+    }
+    else if (
+        target === "property"
+    ) {
+        document.getElementById(
+            "property_image"
+        ).value = "";
+        document.getElementById(
+            "propertyFileName"
+        ).innerText =
+            "No image selected";
+        document.getElementById(
+            "propertyPreviewContainer"
+        ).style.display = "none";
+    }
+}
+
+/* ==================================================
+   RESET DOCUMENT VERIFICATION
+================================================== */
+function resetDocumentVerification() {
+    document.getElementById(
+        "document"
+    ).value = "";
+    document.getElementById(
+        "documentFileName"
+    ).innerText =
+        "No document selected";
+    document.getElementById(
+        "documentPreviewContainer"
+    ).style.display = "none";
+    clearVerification(
+        "documentVerification"
+    );
+}
+
+/* ==================================================
+   OPEN CAMERA
+================================================== */
+
+async function openCamera(
+    target
+) {
+    cameraTarget = target;
+    const modal =
+        document.getElementById(
+            "cameraModal"
+        );
+    const video =
+        document.getElementById(
+            "cameraVideo"
+        );
+
+    try {
+        cameraStream =
+            await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: {
+                      ideal: "environment"
+                    },
+                    width: {
+                      ideal: 1920
+                    },
+                    height: {
+                       ideal: 1080
+                    }
+                },
+                audio: false
+            });
+        video.srcObject =
+            cameraStream;
+        modal.style.display =
+            "flex";
+    }
+    catch(error) {
+        alert(
+            "Camera access is not available. Please allow camera permission or use Choose File."
+        );
+        cameraStream = null;
+    }
+}
+
+/* ==================================================
+   CAPTURE IMAGE
+================================================== */
+function captureImage() {
+    if (
+        !cameraStream
+    ) {
+        return;
+    }
+    const video =
+        document.getElementById(
+            "cameraVideo"
+        );
+    const canvas =
+        document.getElementById(
+            "cameraCanvas"
+        );
+    canvas.width =
+        video.videoWidth;
+    canvas.height =
+        video.videoHeight;
+    const context =
+        canvas.getContext("2d");
+    context.drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+    canvas.toBlob(
+        function(blob) {
+            if (!blob) {
+                alert(
+                    "Unable to capture image."
+                );
+                return;
+            }
+            const timestamp =
+                new Date()
+                .getTime();
+            const filename =
+                cameraTarget === "document"
+                    ? "document_camera_" +
+                      timestamp +
+                      ".jpg"
+                    : "property_camera_" +
+                      timestamp +
+                      ".jpg";
+            const file =
+                new File(
+                    [blob],
+                    filename,
+                    {
+                        type: "image/jpeg"
+                    }
+                );
+            /*
+             Put captured image into
+             corresponding file input.
+            */
+            const dataTransfer =
+                new DataTransfer();
+            dataTransfer.items.add(
+                file
+            );
+            if (
+                cameraTarget === "document"
+            ) {
+                const input =
+                    document.getElementById(
+                        "document"
+                    );
+                input.files =
+                    dataTransfer.files;
+                handleDocumentSelection({
+                    target: input
+                });
+            }
+            else if (
+                cameraTarget === "property"
+            ) {
+                const input =
+                    document.getElementById(
+                        "property_image"
+                    );
+                input.files =
+                    dataTransfer.files;
+                handlePropertySelection({
+                    target: input
+                });
+            }
+            closeCamera();
+        },
+        "image/jpeg",
+        0.92
+    );
+}
+
+/* ==================================================
+   CLOSE CAMERA
+================================================== */
+function closeCamera() {
+    const video =
+        document.getElementById(
+            "cameraVideo"
+        );
+    if (
+        cameraStream
+    ) {
+        cameraStream
+            .getTracks()
+            .forEach(
+                function(track) {
+                    track.stop();
+                }
+            );
+        cameraStream = null;
+    }
+    video.srcObject = null;
+    document.getElementById(
+        "cameraModal"
+    ).style.display =
+        "none";
+    cameraTarget = null;
+}
+
+/* ==================================================
+   FORM SUBMIT VALIDATION
+================================================== */
+document.getElementById(
+    "loanForm"
+).addEventListener(
+    "submit",
+    function(event) {
+
+        /*
+         Check document.
+        */
+        const documentInput =
+            document.getElementById(
+                "document"
+            );
+        const documentFile =
+            documentInput.files[0];
+        if (!documentFile) {
+            event.preventDefault();
+            alert(
+                "Please upload or capture your identity document."
+            );
+            return;
+        }
+        /*
+         For image documents, make sure
+         verification passed.
+        */
+        const documentExtension =
+            documentFile.name
+                .split(".")
+                .pop()
+                .toLowerCase();
+        if (
+            documentExtension !== "pdf"
+        ) {
+            const documentStatus =
+                document.getElementById(
+                    "documentVerification"
+                );
+            if (
+                !documentStatus.classList.contains(
+                    "success"
+                )
+            ) {
+                event.preventDefault();
+                alert(
+                    "Please select a clear and verified document image before applying."
+                );
+                return;
+            }
+        }
+        /*
+         Home / Vehicle validation.
+        */
+        const loanType =
+            document.getElementById(
+                "loan_type"
+            ).value;
+        if (
+            loanType === "Home Loan" ||
+            loanType === "Vehicle Loan"
+        ) {
+            const propertyInput =
+                document.getElementById(
+                    "property_image"
+                );
+            if (
+                !propertyInput.files[0]
+            ) {
+                event.preventDefault();
+                alert(
+                    "Please upload or capture the required " +
+                    (
+                        loanType === "Home Loan"
+                            ? "property image."
+                            : "vehicle image."
+                    )
+                );
+                return;
+            }
+            const propertyStatus =
+                document.getElementById(
+                    "propertyVerification"
+                );
+            if (
+                !propertyStatus.classList.contains(
+                    "success"
+                )
+            ) {
+                event.preventDefault();
+                alert(
+                    "Please select a clear and verified image before applying."
+                );
+                return;
+            }
+        }
+        /*
+         Disable submit button after
+         successful validation to prevent
+         accidental double submission.
+        */
+        const submitButton =
+            document.getElementById(
+                "submitButton"
+            );
+        submitButton.disabled =
+            true;
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> ' +
+            'Submitting...';
+    }
+);
+/* ==================================================
+   CLOSE CAMERA WHEN CLICKING OUTSIDE
+================================================== */
+document.getElementById(
+    "cameraModal"
+).addEventListener(
+    "click",
+    function(event) {
+        if (
+            event.target === this
+        ) {
+            closeCamera();
+        }
+    }
+);
+</script>
+</body>
+</html>

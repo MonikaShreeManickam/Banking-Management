@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Update Customer | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- ================= Sidebar ================= -->
+
+    <div class="sidebar">
+
+        <h2>💜 <span>Secure</span> Bank</h2>
+
+        <ul>
+
+            <li>
+
+                <a href="{{ url_for('admin.admindashboard') }}">
+
+                    <i class="fas fa-home"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('admin.adminprofile') }}">
+
+                    <i class="fas fa-user-shield"></i>
+
+                    Admin Profile
+
+                </a>
+
+            </li>
+
+            <li class="active">
+
+                <a href="{{ url_for('admin.viewcustomers') }}">
+
+                    <i class="fas fa-users"></i>
+
+                    View Customers
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('admin.addcustomer') }}">
+
+                    <i class="fas fa-user-plus"></i>
+
+                    Add Customer
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('admin.viewtransactions') }}">
+
+                    <i class="fas fa-money-check-dollar"></i>
+
+                    Transactions
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('loan.loanapplications') }}">
+
+                    <i class="fas fa-file-signature"></i>
+
+                    Loan Applications
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('admin.reports') }}">
+
+                    <i class="fas fa-chart-pie"></i>
+
+                    Reports
+
+                </a>
+
+            </li>
+
+            <li>
+    <a href="#" onclick="showLogoutPopup(); return false;">
+        <i class="fas fa-right-from-bracket"></i>
+        Logout
+    </a>
+</li>
+
+        </ul>
+
+    </div>
+
+    <!-- ================= Main Content ================= -->
+
+    <div class="main-content">
+
+        <h1 class="page-title">
+
+            Update Customer
+
+        </h1>
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                <div class="success-message">
+
+                    {{ messages[0] }}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+        <div class="form-section">
+
+            <form method="POST">
+                  <a href="{{ url_for('admin.updatecustomer', id=customer.customer_id) }}">
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Customer ID</label>
+
+                        <input type="text"
+                               name="customer_id"
+                               value="{{ customer.customer_id }}"
+                               readonly>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Full Name</label>
+
+                        <input type="text"
+                               name="fullname"
+                               value="{{ customer.full_name }}"
+                               required>
+
+                    </div>
+
+                </div>
+
+                <br>
+                                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Email Address</label>
+
+                        <input type="email"
+                               name="email"
+                               value="{{ customer.email }}"
+                               required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Mobile Number</label>
+
+                        <input type="text"
+                               name="mobile"
+                               value="{{ customer.mobile }}"
+                               maxlength="10"
+                               required>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Date of Birth</label>
+
+                        <input type="date"
+                               name="dob"
+                               value="{{ customer.dob }}"
+                               required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Gender</label>
+
+                        <select name="gender" required>
+
+                            <option value="Male"
+                                {% if customer.gender=="Male" %}selected{% endif %}>
+                                Male
+                            </option>
+
+                            <option value="Female"
+                                {% if customer.gender=="Female" %}selected{% endif %}>
+                                Female
+                            </option>
+
+                            <option value="Other"
+                                {% if customer.gender=="Other" %}selected{% endif %}>
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Account Type</label>
+
+                        <select name="account_type" required>
+
+                            <option value="Savings"
+                                {% if customer.account_type=="Savings" %}selected{% endif %}>
+                                Savings Account
+                            </option>
+
+                            <option value="Current"
+                                {% if customer.account_type=="Current" %}selected{% endif %}>
+                                Current Account
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Account Status</label>
+
+                        <select name="status">
+
+                            <option value="Active"
+                                {% if customer.status=="Active" %}selected{% endif %}>
+                                Active
+                            </option>
+
+                            <option value="Inactive"
+                                {% if customer.status=="Inactive" %}selected{% endif %}>
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-control">
+
+                    <label>Address</label>
+
+                    <textarea
+                        name="address"
+                        required>{{ customer.address }}</textarea>
+
+                </div>
+
+                <br>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Available Balance (₹)</label>
+
+                        <input type="number"
+                               name="balance"
+                               value="{{ customer.balance }}"
+                               required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Username</label>
+
+                        <input type="text"
+                               name="username"
+                               value="{{ customer.username }}"
+                               readonly>
+
+                    </div>
+
+                </div>
+
+                <br>
+                                <!-- Buttons -->
+
+                <button type="submit" class="save-btn">
+
+                    <i class="fas fa-floppy-disk"></i>
+
+                    Update Customer
+
+                </button>
+
+                &nbsp;
+
+                <a href="{{ url_for('admin.viewcustomers') }}"
+                   class="btn"
+                   style="display:inline-block;
+                          width:auto;
+                          padding:14px 25px;
+                          text-decoration:none;">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <!-- Customer Summary -->
+
+        <div class="card-container">
+
+            <div class="card">
+
+                <h3>Customer ID</h3>
+
+                <h1>{{ customer.customer_id }}</h1>
+
+                <p>Registered Customer</p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Account Type</h3>
+
+                <h1>{{ customer.account_type }}</h1>
+
+                <p>Bank Account</p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Current Balance</h3>
+
+                <h1>₹ {{ customer.balance }}</h1>
+
+                <p>Available Balance</p>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                <div class="success-message">
+
+                    {{ messages[0] }}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+        <div class="footer">
+
+            © 2026 Secure Bank | Update Customer
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

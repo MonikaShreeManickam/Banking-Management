@@ -1,0 +1,486 @@
+/* ===================================================
+                 GOOGLE FONT
+=================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ===================================================
+                 RESET
+=================================================== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ===================================================
+                 BODY
+=================================================== */
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0d0d0d,#1b0033,#2e0057);
+    overflow-x:hidden;
+    position:relative;
+}
+
+/* Background Glow */
+body::before{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:#7b2cff;
+    border-radius:50%;
+    filter:blur(180px);
+    top:-180px;
+    left:-180px;
+    opacity:.12;
+    z-index:-1;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    width:450px;
+    height:450px;
+    background:#c026ff;
+    border-radius:50%;
+    filter:blur(180px);
+    bottom:-180px;
+    right:-180px;
+    opacity:.12;
+    z-index:-1;
+}
+
+/* ===================================================
+                 MAIN CONTAINER
+=================================================== */
+.container{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+}
+
+/* ===================================================
+                 FORM BOX
+=================================================== */
+.form-box{
+    width:420px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:20px;
+    padding:40px;
+    box-shadow:0 20px 40px rgba(0,0,0,.45);
+    animation:fadeIn .8s ease;
+}
+
+.login-box{
+    width:420px;
+}
+
+.register-box{
+    width:550px;
+}
+
+/* ===================================================
+                 LOGO
+=================================================== */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.logo i{
+    font-size:45px !important;
+    color:#ffffff !important;
+}
+
+.logo span,
+
+.logo h2{
+    font-size:24px;
+    font-weight:700;
+    color:#ffffff !important;
+    margin:0;
+}
+/* ===================================================
+                 TITLE
+=================================================== */
+.form-box h2{
+    margin-top:10px;
+    margin-bottom:30px;
+    color:#ffffff;
+}
+/* ===================================================
+                 INPUT GROUP
+=================================================== */
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-group label{
+    display:block;
+    color:#dcdcdc;
+    font-size:15px;
+    font-weight:500;
+    margin-bottom:8px;
+}
+
+.input-group input,
+.input-group select{
+    width:100%;
+    padding:14px 15px;
+    border:none;
+    outline:none;
+    border-radius:10px;
+    background:rgba(255,255,255,.08);
+    color:#ffffff;
+    font-size:15px;
+    transition:.3s;
+}
+
+.input-group input::placeholder{
+    color:#bfbfbf;
+}
+
+.input-group input:focus,
+.input-group select:focus{
+    border:1px solid #a855f7;
+    box-shadow:0 0 12px rgba(168,85,247,.6);
+}
+
+/* Select Option */
+
+.input-group select option{
+    background:#1b0033;
+    color:#ffffff;
+}
+
+/* ===================================================
+                 BUTTON
+=================================================== */
+
+.btn{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(135deg,#8e44ad,#6a0dad);
+    color:#ffffff;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    background:linear-gradient(135deg,#9b59b6,#7d3cff);
+    box-shadow:0 8px 18px rgba(142,68,173,.45);
+}
+
+/* ===================================================
+            REMEMBER & FORGOT PASSWORD
+=================================================== */
+
+.extra{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:10px;
+    margin-bottom:20px;
+}
+
+.extra label{
+    color:#ffffff;
+    font-size:14px;
+}
+
+.extra input[type="checkbox"]{
+    accent-color:#8b5cf6;
+}
+
+.extra a{
+    color:#bb86fc;
+    text-decoration:none;
+    font-size:14px;
+    transition:.3s;
+}
+
+.extra a:hover{
+    color:#ffffff;
+}
+
+/* ===================================================
+                    LINE
+=================================================== */
+
+.line{
+    width:100%;
+    height:1px;
+    background:rgba(255,255,255,.15);
+    margin:25px 0;
+}
+/* ===================================================
+                LINKS
+=================================================== */
+
+.links{
+    text-align:center;
+    margin-top:20px;
+}
+
+.links p{
+    color:#d8d8d8;
+    font-size:16px;
+}
+
+.links a{
+    color:#bb86fc;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.links a:hover{
+    color:#ffffff;
+}
+
+/* ===================================================
+                SMALL TEXT
+=================================================== */
+
+.small-text{
+    text-align:center;
+    color:#cfcfcf;
+    font-size:13px;
+    margin-top:15px;
+}
+
+/* ===================================================
+                SUCCESS MESSAGE
+=================================================== */
+
+.success-message{
+    background:#22c55e;
+    color:#ffffff;
+    padding:12px;
+    border-radius:8px;
+    text-align:center;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+/* ===================================================
+                FLASH MESSAGE
+=================================================== */
+
+.flash-message{
+    background:#ef4444;
+    color:#ffffff;
+    padding:12px;
+    border-radius:8px;
+    text-align:center;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+/* ===================================================
+                HOME PAGE
+=================================================== */
+
+.home-container{
+    width:550px;
+    max-width:90%;
+    margin:80px auto;
+    padding:45px;
+    text-align:center;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,.45);
+    animation:fadeIn .8s ease;
+}
+
+.home-container h1{
+    color:#ffffff;
+    font-size:38px;
+    margin-bottom:15px;
+}
+
+.home-container p{
+    color:#dcdcdc;
+    font-size:18px;
+    margin-bottom:30px;
+}
+
+/* ===================================================
+                HOME BUTTON
+=================================================== */
+
+.home-btn{
+    display:block;
+    width:100%;
+    padding:15px;
+    margin:15px 0;
+    border-radius:10px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#ffffff;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.home-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 20px rgba(0,0,0,.30);
+}
+
+/* ===================================================
+                HOME FOOTER
+=================================================== */
+
+.footer-text{
+    margin-top:25px;
+    color:#d1d5db;
+    font-size:15px;
+}
+/* ===================================================
+                ANIMATION
+=================================================== */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+/* ===================================================
+                RESPONSIVE DESIGN
+=================================================== */
+
+@media (max-width:768px){
+
+    .form-box{
+        width:100%;
+        padding:30px;
+    }
+
+    .register-box{
+        width:100%;
+    }
+
+    .home-container{
+        width:95%;
+        padding:30px;
+    }
+
+    .home-container h1{
+        font-size:30px;
+    }
+
+    .home-container p{
+        font-size:16px;
+    }
+
+}
+
+@media (max-width:480px){
+
+    .container{
+        padding:15px;
+    }
+
+    .form-box{
+        padding:25px;
+    }
+
+    .form-box h2{
+        font-size:24px;
+    }
+
+    .input-group input,
+    .input-group select{
+        font-size:14px;
+        padding:12px;
+    }
+
+    .btn{
+        font-size:15px;
+        padding:12px;
+    }
+
+    .home-container{
+        padding:25px;
+    }
+
+    .home-container h1{
+        font-size:24px;
+    }
+
+    .home-btn{
+        font-size:16px;
+        padding:13px;
+    }
+
+}
+
+/* ===================================================
+                SCROLLBAR
+=================================================== */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#0d0d0d;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#7b2cff;
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#bb86fc;
+}
+
+/* ===================================================
+                TEXT SELECTION
+=================================================== */
+
+::selection{
+    background:#7b2cff;
+    color:#ffffff;
+}
+
+/* ===================================================
+                INPUT AUTOFILL FIX
+=================================================== */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus{
+
+    -webkit-text-fill-color:#ffffff;
+    transition:background-color 5000s ease-in-out 0s;
+
+}

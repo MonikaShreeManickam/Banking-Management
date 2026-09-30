@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Prediction History | Secure Bank</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+
+<style>
+
+.prediction-approved {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #d1fae5;
+    color: #047857;
+    font-weight: 600;
+}
+
+.prediction-rejected {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-weight: 600;
+}
+
+.status-pending {
+    color: #92400e;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+<!-- ================= Sidebar ================= -->
+
+<div class="sidebar">
+
+<h2>💜 <span>Secure</span> Bank</h2>
+
+<ul>
+
+<li>
+<a href="{{ url_for('admin.admindashboard') }}">
+<i class="fas fa-home"></i>
+Dashboard
+</a>
+</li>
+
+<li>
+<a href="{{ url_for('admin.adminprofile') }}">
+<i class="fas fa-user-shield"></i>
+Admin Profile
+</a>
+</li>
+
+<li>
+<a href="{{ url_for('admin.viewcustomers') }}">
+<i class="fas fa-users"></i>
+View Customers
+</a>
+</li>
+
+<li>
+<a href="{{ url_for('admin.viewtransactions') }}">
+<i class="fas fa-money-check-dollar"></i>
+Transactions
+</a>
+</li>
+
+<li class="active">
+<a href="{{ url_for('loan.loanapplications') }}">
+<i class="fas fa-file-signature"></i>
+Loan Applications
+</a>
+</li>
+
+<li>
+<a href="{{ url_for('admin.adminchangepassword') }}">
+<i class="fas fa-lock"></i>
+Change Password
+</a>
+</li>
+
+<li>
+<a href="{{ url_for('admin.reports') }}">
+<i class="fas fa-chart-line"></i>
+Reports
+</a>
+</li>
+
+</ul>
+
+</div>
+
+
+<!-- ================= Main Content ================= -->
+
+<div class="main-content">
+
+<h1 class="page-title">
+
+<i class="fas fa-clock-rotate-left"></i>
+
+Saved Loan Predictions
+
+</h1>
+
+
+<div class="table-box">
+
+<h2>Prediction History</h2>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Loan ID</th>
+
+<th>Customer</th>
+
+<th>Loan Type</th>
+
+<th>Loan Amount</th>
+
+<th>Credit Score</th>
+
+<th>ML Prediction</th>
+
+<th>Probability</th>
+
+<th>Model Accuracy</th>
+
+<th>Prediction Date</th>
+
+<th>Loan Status</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+{% if predictions %}
+
+{% for prediction in predictions %}
+
+<tr>
+
+
+<td>
+
+{{ prediction.loan_id }}
+
+</td>
+
+
+<td>
+
+{{ prediction.full_name }}
+
+</td>
+
+
+<td>
+
+{{ prediction.loan_type }}
+
+</td>
+
+
+<td>
+
+₹{{ "%.2f"|format(
+prediction.loan_amount|float
+) }}
+
+</td>
+
+
+<td>
+
+{{ prediction.credit_score }}
+
+</td>
+
+
+<td>
+
+{% if prediction.prediction_result == "Approved" %}
+
+<span class="prediction-approved">
+
+<i class="fas fa-circle-check"></i>
+
+Approved
+
+</span>
+
+{% else %}
+
+<span class="prediction-rejected">
+
+<i class="fas fa-circle-xmark"></i>
+
+Rejected
+
+</span>
+
+{% endif %}
+
+</td>
+
+
+<td>
+
+{{ "%.2f"|format(
+prediction.approval_probability|float
+) }}%
+
+</td>
+
+
+<td>
+
+{{ "%.2f"|format(
+prediction.model_accuracy|float
+) }}%
+
+</td>
+
+
+<td>
+
+{{ prediction.prediction_date }}
+
+</td>
+
+
+<td>
+
+{% if prediction.loan_status == "Approved" %}
+
+<span class="status-success">
+
+Approved
+
+</span>
+
+{% elif prediction.loan_status == "Rejected" %}
+
+<span class="status-danger">
+
+Rejected
+
+</span>
+
+{% else %}
+
+<span class="status-pending">
+
+Pending
+
+</span>
+
+{% endif %}
+
+</td>
+
+
+</tr>
+
+{% endfor %}
+
+
+{% else %}
+
+<tr>
+
+<td colspan="10"
+style="text-align:center;">
+
+No Saved Predictions Found
+
+</td>
+
+</tr>
+
+{% endif %}
+
+</tbody>
+
+</table>
+
+</div>
+
+
+<br>
+
+
+<div class="action-buttons">
+
+<a href="{{ url_for('loan.loanapplications') }}">
+
+<i class="fas fa-arrow-left"></i>
+
+Back to Loan Applications
+
+</a>
+
+</div>
+
+
+<div class="footer">
+
+© 2026 Secure Bank | Prediction History
+
+</div>
+
+
+</div>
+
+</div>
+
+</body>
+
+</html>

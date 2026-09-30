@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Dashboard | Secure Bank</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+<!--============Logout Model==========-->
+
+<div id="logoutModal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h3>Logout</h3>
+
+        <p>Are you sure you want to logout?</p>
+
+        <div class="logout-buttons">
+
+            <button type="button"
+                    class="logout-yes"
+                    onclick="confirmLogout()">
+                Yes
+            </button>
+
+            <button type="button"
+                    class="logout-no"
+                    onclick="closeLogoutPopup()">
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<!--==========JScript for logout======-->
+
+<script>
+
+function showLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "flex";
+}
+
+function closeLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "none";
+}
+
+function confirmLogout() {
+    window.location.href = "{{ url_for('customer.logout') }}";
+}
+
+</script>
+
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- ================= Sidebar ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>💜 Secure Bank</h2>
+
+        </div>
+
+        <ul>
+
+            <li class="active">
+
+                <a href="{{ url_for('customer.dashboard') }}" class="active">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.profile') }}">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    My Profile
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.accountdetails') }}">
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                    Account Details
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.fundtransfer') }}">
+
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+
+                    Fund Transfer
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.transactionhistory') }}">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    Transaction History
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('loan.applyloan') }}">
+
+                    <i class="fa-solid fa-file-circle-plus"></i>
+
+                    Apply Loan
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('loan.loanstatus') }}">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Loan Status
+
+                </a>
+
+            </li>
+            
+            <li>
+
+                <a href="{{ url_for('customer.changepassword') }}">
+
+                    <i class="fa-solid fa-key"></i>
+
+                    Change Password
+                    </a>
+                </li>
+
+                <li>
+                <a href="#" onclick="showLogoutPopup(); return false;">
+                    <i class="fas fa-right-from-bracket"></i>
+                    Logout
+                </a>
+            </li>
+            </ul>
+        </aside>
+        <main class="main-content">
+
+                        <!-- ================= Dashboard Cards ================= -->
+
+        <section class="dashboard-cards">
+
+            <div class="card">
+
+                <i class="fa-solid fa-wallet"></i>
+
+                <h3>Account Type</h3>
+
+                <h2>{{ customer.account_type }}</h2>
+
+            </div>
+
+            <div class="card">
+
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                <h3>Available Balance</h3>
+
+                <h2>
+
+                    ₹
+
+                    {% if account %}
+                        {{ account.balance }}
+                    {% else %}
+                        0.00
+                    {% endif %}
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <i class="fa-solid fa-building-columns"></i>
+
+                <h3>Branch</h3>
+
+                <h2>
+
+                    {% if account %}
+                        {{ account.branch_name }}
+                    {% else %}
+                        Main Branch
+                    {% endif %}
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <i class="fa-solid fa-user-check"></i>
+
+                <h3>Status</h3>
+
+                <h2>
+
+                    {% if account %}
+                        {{ account.account_status }}
+                    {% else %}
+                        Active
+                    {% endif %}
+
+                </h2>
+
+            </div>
+
+        </section>
+
+        <!-- ================= Customer Information ================= -->
+
+        <section class="customer-details">
+
+<div class="profile-card">
+
+    <h2><i class="fas fa-user-circle"></i> Customer Information</h2>
+
+    <div class="profile-grid">
+
+        <div class="info-box">
+            <label>Customer ID</label>
+            <p>{{ customer.customer_id }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Full Name</label>
+            <p>{{ customer.full_name }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Username</label>
+            <p>{{ customer.username }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Email</label>
+            <p>{{ customer.email }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Mobile</label>
+            <p>{{ customer.mobile }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Date Of Birth</label>
+            <p>{{ customer.date_of_birth }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Gender</label>
+            <p>{{ customer.gender }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Account Type</label>
+            <p>{{ customer.account_type }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Address</label>
+            <p>{{ customer.address }}</p>
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+        <!-- ================= Account Information ================= -->
+
+        <section class="customer-details">
+
+            <div class="profile-card">
+
+    <h2><i class="fas fa-wallet"></i> Account Summary</h2>
+
+    <div class="profile-grid">
+
+        <div class="info-box">
+            <label>Account Number</label>
+            <p>{{ account.account_number }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Balance</label>
+            <p>₹ {{ account.balance }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>IFSC Code</label>
+            <p>{{ account.ifsc_code }}</p>
+        </div>
+
+        <div class="info-box">
+            <label>Branch</label>
+            <p>{{ account.branch_name }}</p>
+        </div>
+
+    </div>
+
+</div>
+</section>
+        <!-- ================= Loan Status ================= -->
+
+        <section class="customer-details">
+
+            <div class="details-card">
+
+                <h2>
+
+                    <i class="fa-solid fa-file-contract"></i>
+
+                    Latest Loan Status
+
+                </h2>
+
+                {% if loan %}
+
+                <table class="details-table">
+
+                    <tr>
+
+                        <th>Loan Type</th>
+
+                        <td>{{ loan.loan_type }}</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Loan Amount</th>
+
+                        <td>₹ {{ loan.loan_amount }}</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Status</th>
+
+                        <td>{{ loan.loan_status }}</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Applied Date</th>
+
+                        <td>{{ loan.application_date }}</td>
+
+                    </tr>
+
+                </table>
+
+                {% else %}
+
+                <p>No loan application found.</p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+        <!-- ================= Recent Transactions ================= -->
+
+        <section class="customer-details">
+
+            <div class="details-card">
+
+                <h2>
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                    Recent Transactions
+
+                </h2>
+
+                {% if transactions %}
+
+                <table class="details-table">
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Type</th>
+
+                        <th>Amount</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                    {% for t in transactions %}
+
+                    <tr>
+
+                        <td>{{ t.transaction_date }}</td>
+
+                        <td>{{ t.transaction_type }}</td>
+
+                        <td>₹ {{ t.amount }}</td>
+
+                        <td>{{ t.status }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </table>
+
+                {% else %}
+
+                <p>No transactions available.</p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+        <!-- ================= Footer ================= -->
+
+        <footer class="dashboard-footer">
+
+            <p>
+
+                © 2026 Secure Bank | Banking Management System
+
+            </p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

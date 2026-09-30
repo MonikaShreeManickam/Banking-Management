@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+<title>Delete Customer | Secure Bank Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+<div class="dashboard">
+
+    <div class="sidebar">
+        <h2>💜 Secure Bank</h2>
+
+        <ul>
+            <li>
+                <a href="{{ url_for('admin.admindashboard') }}">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('admin.viewcustomers') }}">
+                    <i class="fas fa-users"></i> View Customers
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('admin.deletecustomer', id=1) }}">
+                    <i class="fas fa-user-minus"></i> Delete Customer
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('admin.home') }}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+
+        <h1 class="page-title">
+            Delete Customer
+        </h1>
+
+        <div class="form-section">
+
+            <form>
+
+                <div class="form-control">
+                    <label>Customer ID</label>
+                    <input type="text"
+                           value="CUS1001"
+                           readonly>
+                </div>
+
+                <br>
+
+                <div class="form-control">
+                    <label>Customer Name</label>
+                    <input type="text"
+                           value="Ramya"
+                           readonly>
+                </div>
+
+                <br>
+
+                <div class="form-control">
+                    <label>Account Number</label>
+                    <input type="text"
+                           value="123456789012"
+                           readonly>
+                </div>
+
+                <br>
+
+                <div class="form-control">
+                    <label>Reason for Deletion</label>
+                    <textarea placeholder="Enter reason for deleting customer account"></textarea>
+                </div>
+
+                <br>
+
+                <button type="submit"
+                        class="save-btn"
+                        style="background:#d32f2f;">
+                    <i class="fas fa-trash"></i>
+                    Delete Customer
+                </button>
+
+                &nbsp;
+
+                <a href="{{ url_for('admin.viewcustomers') }}"
+                   class="btn"
+                   style="display:inline-block;width:auto;padding:14px 25px;text-decoration:none;">
+                    <i class="fas fa-arrow-left"></i>
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+        <div class="footer">
+            © 2026 Secure Bank | Delete Customer
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Management System | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="home-container">
+
+    <h1>
+        <i class="fas fa-university"></i>
+        Banking Management System
+    </h1>
+
+    <p>
+        Select your portal to continue
+    </p>
+
+    <a href="{{ url_for('customer.login') }}" class="home-btn">
+        Customer Login
+    </a>
+
+    <a href="{{ url_for('admin.adminlogin') }}" class="home-btn">
+        <i class="fas fa-user-shield"></i>
+        Admin Login
+    </a>
+
+    <div class="footer-text">
+        <i class="fas fa-shield-halved"></i>
+        Secure • Fast • Reliable Banking
+        <br><br>
+        © 2026 Secure Bank. All Rights Reserved.
+    </div>
+
+</div>
+
+</body>
+</html>

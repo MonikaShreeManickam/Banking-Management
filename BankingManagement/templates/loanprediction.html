@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Loan Prediction | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="form-box">
+
+        <!-- ============================= -->
+        <!-- LOGO -->
+        <!-- ============================= -->
+
+        <div class="logo">
+
+            <i class="fa-solid fa-robot fa-3x"></i>
+
+            <h2>Secure Bank</h2>
+
+        </div>
+
+
+        <h2>Loan Prediction</h2>
+
+        <br>
+
+
+        <!-- ============================= -->
+        <!-- CUSTOMER DETAILS -->
+        <!-- ============================= -->
+
+        <div class="input-group">
+
+            <label>Customer ID</label>
+
+            <input type="text"
+                   value="{{ loan.customer_id }}"
+                   readonly>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Customer Name</label>
+
+            <input type="text"
+                   value="{{ loan.full_name }}"
+                   readonly>
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- LOAN DETAILS -->
+        <!-- ============================= -->
+
+        <div class="input-group">
+
+            <label>Loan Type</label>
+
+            <input type="text"
+                   value="{{ loan.loan_type }}"
+                   readonly>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Loan Amount</label>
+
+            <input type="text"
+                   value="₹{{ '{:,.2f}'.format(loan.loan_amount) }}"
+                   readonly>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Monthly Income</label>
+
+            <input type="text"
+                   value="₹{{ '{:,.2f}'.format(loan.monthly_income) }}"
+                   readonly>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Credit Score</label>
+
+            <input type="text"
+                   value="{{ loan.credit_score }}"
+                   readonly>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Employment Type</label>
+
+            <input type="text"
+                   value="{{ loan.employment_type }}"
+                   readonly>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Loan Term</label>
+
+            <input type="text"
+                   value="{{ loan.loan_term }} Months"
+                   readonly>
+
+        </div>
+
+
+        <br>
+
+
+        <!-- ============================= -->
+        <!-- MAXIMUM ELIGIBLE AMOUNT -->
+        <!-- ============================= -->
+
+        {% if max_loan_amount > 0 %}
+
+        <div class="card">
+
+            <h3>
+                <i class="fa-solid fa-money-bill-wave"></i>
+                Maximum Eligible Loan Amount
+            </h3>
+
+            <br>
+
+            <h2>
+                ₹{{ '{:,.0f}'.format(max_loan_amount) }}
+            </h2>
+
+            <p>
+                Based on Credit Score:
+                <strong>{{ loan.credit_score }}</strong>
+            </p>
+
+        </div>
+
+        <br>
+
+        {% else %}
+
+        <div class="card">
+
+            <h3>
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Loan Eligibility
+            </h3>
+
+            <br>
+
+            <p>
+                Credit score is below the minimum eligibility level.
+            </p>
+
+        </div>
+
+        <br>
+
+        {% endif %}
+
+
+        <!-- ============================= -->
+        <!-- PREDICT BUTTON -->
+        <!-- ============================= -->
+
+        <form action="{{ url_for('loan.loanprediction',
+                                 loan_id=loan.loan_id) }}"
+              method="POST">
+
+            <button type="submit"
+                    class="btn">
+
+                <i class="fa-solid fa-robot"></i>
+
+                Predict Loan
+
+            </button>
+
+        </form>
+
+
+        <br>
+
+
+        <!-- ============================= -->
+        <!-- FLASH MESSAGES -->
+        <!-- ============================= -->
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="card">
+
+                        <p>
+                            <i class="fa-solid fa-circle-info"></i>
+                            {{ message }}
+                        </p>
+
+                    </div>
+
+                    <br>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- ============================= -->
+        <!-- PREDICTION RESULT -->
+        <!-- ============================= -->
+
+        {% if prediction %}
+
+        <div class="card">
+
+            <h3>
+                <i class="fa-solid fa-chart-line"></i>
+                ML Prediction Result
+            </h3>
+
+            <br>
+
+
+            {% if prediction == "Approved" %}
+
+                <h2 style="color: green;">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    {{ prediction }}
+
+                </h2>
+
+            {% else %}
+
+                <h2 style="color: red;">
+
+                    <i class="fa-solid fa-circle-xmark"></i>
+
+                    {{ prediction }}
+
+                </h2>
+
+            {% endif %}
+
+
+            <br>
+
+
+            <!-- APPROVAL PROBABILITY -->
+
+            <h3>
+
+                Approval Probability:
+
+                <strong>
+                    {{ probability }}%
+                </strong>
+
+            </h3>
+
+
+            <br>
+
+
+            <!-- ============================= -->
+            <!-- PREDICTION DETAILS TABLE -->
+            <!-- ============================= -->
+
+            <table>
+
+                <tr>
+
+                    <th>Customer ID</th>
+
+                    <td>
+                        {{ loan.customer_id }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Customer Name</th>
+
+                    <td>
+                        {{ loan.full_name }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Loan Type</th>
+
+                    <td>
+                        {{ loan.loan_type }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Loan Amount</th>
+
+                    <td>
+                        ₹{{ '{:,.2f}'.format(loan.loan_amount) }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Monthly Income</th>
+
+                    <td>
+                        ₹{{ '{:,.2f}'.format(loan.monthly_income) }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Credit Score</th>
+
+                    <td>
+                        {{ loan.credit_score }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Employment Type</th>
+
+                    <td>
+                        {{ loan.employment_type }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Loan Term</th>
+
+                    <td>
+                        {{ loan.loan_term }} Months
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Maximum Eligible Amount</th>
+
+                    <td>
+
+                        ₹{{ '{:,.0f}'.format(max_loan_amount) }}
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>ML Prediction</th>
+
+                    <td>
+
+                        {% if prediction == "Approved" %}
+
+                            <strong style="color: green;">
+                                {{ prediction }}
+                            </strong>
+
+                        {% else %}
+
+                            <strong style="color: red;">
+                                {{ prediction }}
+                            </strong>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Approval Probability</th>
+
+                    <td>
+                        {{ probability }}%
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <th>Model Accuracy</th>
+
+                    <td>
+                        {{ model_accuracy }}%
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+            <br>
+
+
+            <!-- ============================= -->
+            <!-- SAVE PREDICTION -->
+            <!-- ============================= -->
+
+            <form action="{{ url_for('loan.saveprediction') }}"
+                  method="POST">
+
+                <input type="hidden"
+                       name="loan_id"
+                       value="{{ loan.loan_id }}">
+
+
+                <input type="hidden"
+                       name="prediction_result"
+                       value="{{ prediction }}">
+
+
+                <input type="hidden"
+                       name="approval_probability"
+                       value="{{ probability }}">
+
+
+                <button type="submit"
+                        class="btn">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Save Prediction
+
+                </button>
+
+            </form>
+
+        </div>
+
+        {% endif %}
+
+
+        <br>
+
+
+        <!-- ============================= -->
+        <!-- ACTION BUTTONS -->
+        <!-- ============================= -->
+
+        <div class="action-buttons">
+
+            <a href="{{ url_for('loan.loanapplications') }}">
+
+                <i class="fa-solid fa-file-signature"></i>
+
+                Loan Applications
+
+            </a>
+
+
+            <a href="{{ url_for('admin.admindashboard') }}">
+
+                <i class="fa-solid fa-house"></i>
+
+                Back to Dashboard
+
+            </a>
+
+        </div>
+
+
+        <br>
+
+
+        <!-- ============================= -->
+        <!-- FOOTER -->
+        <!-- ============================= -->
+
+        <div class="footer">
+
+            © 2026 Secure Bank | Loan Prediction
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

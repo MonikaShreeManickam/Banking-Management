@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Loan History | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="dashboard">
+
+        <div class="header">
+
+            <h2>
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                Loan History
+
+            </h2>
+
+        </div>
+
+        <br>
+
+        {% if history %}
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Loan ID</th>
+
+                    <th>Loan Type</th>
+
+                    <th>Loan Amount</th>
+
+                    <th>Monthly Income</th>
+
+                    <th>Credit Score</th>
+
+                    <th>Employment</th>
+
+                    <th>Loan Term</th>
+
+                    <th>Applied Date</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for loan in history %}
+
+                <tr>
+
+                    <td>{{ loan.loan_id }}</td>
+
+                    <td>{{ loan.loan_type }}</td>
+
+                    <td>₹ {{ loan.loan_amount }}</td>
+
+                    <td>₹ {{ loan.monthly_income }}</td>
+
+                    <td>{{ loan.credit_score }}</td>
+
+                    <td>{{ loan.employment_type }}</td>
+
+                    <td>{{ loan.loan_term }} Years</td>
+
+                    <td>{{ loan.application_date }}</td>
+
+                    <td>
+
+                        {% if loan.loan_status == "Approved" %}
+
+                            <span style="color:green;font-weight:bold;">
+
+                                <i class="fa-solid fa-circle-check"></i>
+
+                                Approved
+
+                            </span>
+
+                        {% elif loan.loan_status == "Rejected" %}
+
+                            <span style="color:red;font-weight:bold;">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                Rejected
+
+                            </span>
+
+                        {% else %}
+
+                            <span style="color:orange;font-weight:bold;">
+
+                                <i class="fa-solid fa-hourglass-half"></i>
+
+                                Pending
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div style="text-align:center; padding:40px;">
+
+            <i class="fa-solid fa-folder-open fa-4x"></i>
+
+            <br><br>
+
+            <h2>No Loan History Available</h2>
+
+            <p>You have not applied for any loans yet.</p>
+
+            <br>
+
+            <a href="{{ url_for('loan.applyloan') }}"
+               class="btn">
+
+                <i class="fa-solid fa-file-circle-plus"></i>
+
+                Apply

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Account Details | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+
+    <!-- Account Details Layout Fix -->
+    <style>
+
+        /* Main content should not go behind sidebar */
+
+        .dashboard-container .main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            box-sizing: border-box;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+
+        /* Keep all three main sections inside main content */
+
+        .balance-card,
+        .profile-card,
+        .table-box {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        /* Prevent table from overflowing */
+
+        .table-box {
+            overflow-x: auto;
+        }
+
+
+        /* Responsive layout */
+
+        @media (max-width: 900px) {
+
+            .dashboard-container .main-content {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+                padding: 20px;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .dashboard-container .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!--============ Logout Modal ============-->
+
+<div id="logoutModal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h3>Logout</h3>
+
+        <p>Are you sure you want to logout?</p>
+
+        <div class="logout-buttons">
+
+            <button type="button"
+                    class="logout-yes"
+                    onclick="confirmLogout()">
+                Yes
+            </button>
+
+            <button type="button"
+                    class="logout-no"
+                    onclick="closeLogoutPopup()">
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!--========== JavaScript for Logout ==========-->
+
+<script>
+
+function showLogoutPopup() {
+
+    document.getElementById("logoutModal").style.display = "flex";
+
+}
+
+
+function closeLogoutPopup() {
+
+    document.getElementById("logoutModal").style.display = "none";
+
+}
+
+
+function confirmLogout() {
+
+    window.location.href = "{{ url_for('customer.logout') }}";
+
+}
+
+</script>
+
+
+
+<div class="dashboard-container">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>💜 Secure Bank</h2>
+
+        </div>
+
+
+        <ul>
+
+
+            <!-- Dashboard -->
+
+            <li>
+
+                <a href="{{ url_for('customer.dashboard') }}">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+
+            <!-- My Profile -->
+
+            <li>
+
+                <a href="{{ url_for('customer.profile') }}">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    My Profile
+
+                </a>
+
+            </li>
+
+
+            <!-- Account Details -->
+
+            <li class="active">
+
+                <a href="{{ url_for('customer.accountdetails') }}">
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                    Account Details
+
+                </a>
+
+            </li>
+
+
+            <!-- Fund Transfer -->
+
+            <li>
+
+                <a href="{{ url_for('customer.fundtransfer') }}">
+
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+
+                    Fund Transfer
+
+                </a>
+
+            </li>
+
+
+            <!-- Transaction History -->
+
+            <li>
+
+                <a href="{{ url_for('customer.transactionhistory') }}">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    Transaction History
+
+                </a>
+
+            </li>
+
+
+            <!-- Apply Loan -->
+
+            <li>
+
+                <a href="{{ url_for('loan.applyloan') }}">
+
+                    <i class="fa-solid fa-file-circle-plus"></i>
+
+                    Apply Loan
+
+                </a>
+
+            </li>
+
+
+            <!-- Loan Status -->
+
+            <li>
+
+                <a href="{{ url_for('loan.loanstatus') }}">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Loan Status
+
+                </a>
+
+            </li>
+
+
+            <!-- Change Password -->
+
+            <li>
+
+                <a href="{{ url_for('customer.changepassword') }}">
+
+                    <i class="fa-solid fa-key"></i>
+
+                    Change Password
+
+                </a>
+
+            </li>
+
+
+            <!-- Logout -->
+
+            <li>
+
+                <a href="#"
+                   onclick="showLogoutPopup(); return false;">
+
+                    <i class="fas fa-right-from-bracket"></i>
+
+                    Logout
+
+                </a>
+
+            </li>
+
+
+        </ul>
+
+    </aside>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-content">
+
+
+        <!-- Page Title -->
+
+        <h1 class="page-title">
+
+            Account Details
+
+        </h1>
+
+
+
+        <!-- ================================================= -->
+        <!-- 1. BALANCE CARD -->
+        <!-- ================================================= -->
+
+        <div class="balance-card">
+
+            <h2>Available Balance</h2>
+
+
+            <h1>
+
+                ₹
+
+                {% if account %}
+
+                    {{ account.balance }}
+
+                {% else %}
+
+                    0.00
+
+                {% endif %}
+
+            </h1>
+
+
+            <p>
+
+                Transfer money securely to another customer.
+
+            </p>
+
+
+            <p>
+
+                Account Status :
+
+                {% if account %}
+
+                    {{ account.account_status }}
+
+                {% else %}
+
+                    Active
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+
+        <!-- ================================================= -->
+        <!-- 2. BANK ACCOUNT INFORMATION -->
+        <!-- ================================================= -->
+
+        <div class="profile-card">
+
+
+            <h2>
+
+                Bank Account Information
+
+            </h2>
+
+
+            <div class="profile-info">
+
+
+                <!-- Customer Name -->
+
+                <div class="info-box">
+
+                    <label>Customer Name</label>
+
+                    <p>
+
+                        {{ customer.full_name }}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Customer ID -->
+
+                <div class="info-box">
+
+                    <label>Customer ID</label>
+
+                    <p>
+
+                        {{ customer.customer_id }}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Username -->
+
+                <div class="info-box">
+
+                    <label>Username</label>
+
+                    <p>
+
+                        {{ customer.username }}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="info-box">
+
+                    <label>Email</label>
+
+                    <p>
+
+                        {{ customer.email }}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Mobile -->
+
+                <div class="info-box">
+
+                    <label>Mobile</label>
+
+                    <p>
+
+                        {{ customer.mobile }}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Account Number -->
+
+                <div class="info-box">
+
+                    <label>Account Number</label>
+
+                    <p>
+
+                        {% if account %}
+
+                            {{ account.account_number }}
+
+                        {% else %}
+
+                            Not Available
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Account Type -->
+
+                <div class="info-box">
+
+                    <label>Account Type</label>
+
+                    <p>
+
+                        {{ customer.account_type }}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Branch Name -->
+
+                <div class="info-box">
+
+                    <label>Branch Name</label>
+
+                    <p>
+
+                        {% if account %}
+
+                            {{ account.branch_name }}
+
+                        {% else %}
+
+                            Not Available
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- IFSC Code -->
+
+                <div class="info-box">
+
+                    <label>IFSC Code</label>
+
+                    <p>
+
+                        {% if account %}
+
+                            {{ account.ifsc_code }}
+
+                        {% else %}
+
+                            Not Available
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Opening Date -->
+
+                <div class="info-box">
+
+                    <label>Opening Date</label>
+
+                    <p>
+
+                        {% if account %}
+
+                            {{ account.opening_date }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Address -->
+
+                <div class="info-box">
+
+                    <label>Address</label>
+
+                    <p>
+
+                        {{ customer.address }}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Account Status -->
+
+                <div class="info-box">
+
+                    <label>Account Status</label>
+
+                    <p class="status-active">
+
+                        {% if account %}
+
+                            {{ account.account_status }}
+
+                        {% else %}
+
+                            Active
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- Action Buttons -->
+
+            <br>
+
+
+            <div class="action-buttons">
+
+
+                <a href="{{ url_for('customer.dashboard') }}">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Dashboard
+
+                </a>
+
+
+                <a href="{{ url_for('customer.update') }}">
+
+                    <i class="fas fa-user-edit"></i>
+
+                    Update Details
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+        <!-- ================================================= -->
+        <!-- 3. ACCOUNT SUMMARY -->
+        <!-- ================================================= -->
+        <div class="table-box">
+            <h2>
+                Account Summary
+            </h2>
+            <table>
+                <tr>
+                    <th>Account Type</th>
+                    <th>Balance</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>
+                        {{ customer.account_type }}
+                    </td>
+                    <td>
+                        ₹
+                        {% if account %}
+                            {{ account.balance }}
+                        {% else %}
+                            0.00
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if account %}
+                            {{ account.account_status }}
+                        {% else %}
+                            Active
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- ================= FOOTER ================= -->
+        <div class="footer">
+            © 2026 Secure Bank | Banking Management System
+        </div>
+    </main>
+</div>
+</body>
+</html>

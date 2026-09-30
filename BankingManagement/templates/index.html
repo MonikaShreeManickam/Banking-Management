@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Login | Secure Bank</title>
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="form-box login-box">
+        <!-- Logo -->
+        <div class="logo">
+            <h1>💜 <span>Secure</span> Bank</h1>
+        </div>
+        <h2>Customer Login</h2>
+        <!-- Flash Message -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <!-- Login Form -->
+        <form action="{{ url_for('customer.login') }}" method="POST">
+            <div class="input-group">
+                <label>Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter Username"
+                    required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter Password"
+                    required>
+            </div>
+            <div class="extra">
+                <label>
+                    <input type="checkbox" name="remember">
+                    Remember Me
+                </label>
+                <a href="{{ url_for('customer.forgotpassword') }}">
+    Forgot Password?
+</a>
+            </div>
+            <button class="btn" type="submit">
+                Login
+            </button>
+        </form>
+        <div class="line"></div>
+        <div class="links">
+            <p>
+                New Customer?
+                <a href="{{ url_for('customer.register') }}">
+                    Register Now
+                </a>
+            </p>
+        </div>
+        <br>
+        <div class="small-text">
+            © 2026 Secure Bank. All Rights Reserved.
+        </div>
+    </div>
+</div>
+</body>
+</html>

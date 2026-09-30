@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fund Transfer | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+<!--============Logout Model==========-->
+
+<div id="logoutModal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h3>Logout</h3>
+
+        <p>Are you sure you want to logout?</p>
+
+        <div class="logout-buttons">
+
+            <button type="button"
+                    class="logout-yes"
+                    onclick="confirmLogout()">
+                Yes
+            </button>
+
+            <button type="button"
+                    class="logout-no"
+                    onclick="closeLogoutPopup()">
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<!--==========JScript for logout======-->
+
+<script>
+
+function showLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "flex";
+}
+
+function closeLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "none";
+}
+
+function confirmLogout() {
+    window.location.href = "{{ url_for('customer.logout') }}";
+}
+
+</script>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>💜 Secure Bank</h2>
+
+        </div>
+
+        <ul>
+
+            <li>
+
+                <a href="{{ url_for('customer.dashboard') }}" class="active">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.profile') }}">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    My Profile
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.accountdetails') }}">
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                    Account Details
+
+                </a>
+
+            </li>
+
+            <li class="active">
+
+                <a href="{{ url_for('customer.fundtransfer') }}">
+
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+
+                    Fund Transfer
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.transactionhistory') }}">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    Transaction History
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('loan.applyloan') }}">
+
+                    <i class="fa-solid fa-file-circle-plus"></i>
+
+                    Apply Loan
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('loan.loanstatus') }}">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Loan Status
+
+                </a>
+
+            </li>
+            
+            <li>
+
+                <a href="{{ url_for('customer.changepassword') }}">
+
+                    <i class="fa-solid fa-key"></i>
+
+                    Change Password
+                    </a>
+                </li>
+
+                <li>
+                <a href="#" onclick="showLogoutPopup(); return false;">
+                    <i class="fas fa-right-from-bracket"></i>
+                    Logout
+                </a>
+            </li>
+            </ul>
+        </aside>
+
+    <!-- Main -->
+
+    <main class="main-content">
+
+        <h1 class="page-title">
+
+            Fund Transfer
+
+        </h1>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+
+        <div class="flash-message">
+
+            {{ message }}
+
+        </div>
+
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="balance-card">
+
+            <h2>Available Balance</h2>
+
+            <h1>₹ {{ account.balance }}</h1>
+
+            <p>Transfer money securely to another customer.</p>
+
+        </div>
+
+        <div class="form-section">
+
+            <h2>Transfer Details</h2>
+
+            <form action="{{ url_for('customer.fundtransfer') }}"
+                  method="POST">
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Sender Account Number</label>
+
+                        <input
+                            type="text"
+                            name="sender_account"
+                            value="{{ account.account_number }}"
+                            readonly>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Customer Name</label>
+
+                        <input
+                            type="text"
+                            value="{{ customer.full_name }}"
+                            readonly>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Receiver Account Number</label>
+
+                        <input
+                            type="text"
+                            name="receiver_account"
+                            required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>IFSC Code</label>
+
+                        <input
+                            type="text"
+                            name="ifsc"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Transfer Amount</label>
+
+                        <input
+                            type="number"
+                            name="amount"
+                            min="1"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="action-buttons">
+                    <a href="{{ url_for('customer.dashboard') }}">
+                    <i class="fas fa-arrow-left"></i>
+                    Dashboard
+                </a>
+                <button
+                    class="save-btn"
+                    type="submit">
+
+                    <i class="fas fa-paper-plane"></i>
+
+                    Transfer Money
+
+                </button>
+                
+                </div>
+            </form>
+
+        </div>
+
+        <div class="table-box">
+
+            <h2>
+
+                Recent Transfers
+
+            </h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Receiver</th>
+
+                    <th>Amount</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+                {% if transactions %}
+
+                {% for t in transactions %}
+
+                <tr>
+
+                    <td>{{ t.transaction_date }}</td>
+
+                    <td>{{ t.description }}</td>
+
+                    <td>₹ {{ t.amount }}</td>
+
+                    <td>{{ t.status }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="4">
+
+                        No Transfer History
+
+                    </td>
+
+                </tr>
+
+                {% endif %}
+
+            </table>
+
+        </div>
+
+        <div class="footer">
+
+            © 2026 Secure Bank | Banking Management System
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

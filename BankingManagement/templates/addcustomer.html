@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Customer | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- ================= Sidebar ================= -->
+<div class="sidebar">
+
+    <h2>
+        💜 <span>Secure</span> Bank
+    </h2>
+
+    <ul>
+
+        <li>
+            <a href="{{ url_for('admin.admindashboard') }}">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('admin.adminprofile') }}">
+                <i class="fas fa-user-shield"></i>
+                Admin Profile
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('admin.viewcustomers') }}">
+                <i class="fas fa-users"></i>
+                View Customers
+            </a>
+        </li>
+
+        <li class="active">
+            <a href="{{ url_for('admin.addcustomer') }}">
+                <i class="fas fa-user-plus"></i>
+                Add Customer
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('admin.viewtransactions') }}">
+                <i class="fas fa-money-check-dollar"></i>
+                Transactions
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('loan.loanapplications') }}">
+                <i class="fas fa-file-signature"></i>
+                Loan Applications
+            </a>
+        </li>
+
+        <!-- Change Password -->
+        <li>
+            <a href="{{ url_for('admin.adminchangepassword') }}">
+                <i class="fas fa-key"></i>
+                Change Password
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('admin.reports') }}">
+                <i class="fas fa-chart-pie"></i>
+                Reports
+            </a>
+        </li>
+
+        <!-- Logout -->
+   <li>
+    <a href="#" onclick="showLogoutPopup(); return false;">
+        <i class="fas fa-right-from-bracket"></i>
+        Logout
+    </a>
+</li>
+
+    </ul>
+
+</div>
+
+
+    <!-- ================= Main Content ================= -->
+
+    <div class="main-content">
+
+        <h1 class="page-title">
+
+            Add New Customer
+
+        </h1>
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                <div class="success-message">
+
+                    {{ messages[0] }}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+        <div class="form-section">
+
+            <form action="{{ url_for('admin.addcustomer') }}"
+                  method="POST">
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Full Name</label>
+
+                        <input type="text"
+                               name="fullname"
+                               placeholder="Enter Full Name"
+                               required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Email Address</label>
+
+                        <input type="email"
+                               name="email"
+                               placeholder="Enter Email Address"
+                               required>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Mobile Number</label>
+
+                        <input type="text"
+                               name="mobile"
+                               maxlength="10"
+                               placeholder="Enter Mobile Number"
+                               required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Date of Birth</label>
+
+                        <input type="date"
+                               name="dob"
+                               required>
+
+                    </div>
+
+                </div>
+
+                <br>
+                                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Gender</label>
+
+                        <select name="gender" required>
+
+                            <option value="">Select Gender</option>
+
+                            <option value="Male">Male</option>
+
+                            <option value="Female">Female</option>
+
+                            <option value="Other">Other</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Account Type</label>
+
+                        <select name="account_type" required>
+
+                            <option value="">Select Account Type</option>
+
+                            <option value="Savings">Savings Account</option>
+
+                            <option value="Current">Current Account</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-control">
+
+                    <label>Address</label>
+
+                    <textarea
+                        name="address"
+                        placeholder="Enter Customer Address"
+                        required></textarea>
+
+                </div>
+
+                <br>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Aadhaar Number</label>
+
+                        <input type="text"
+                               name="aadhaar"
+                               maxlength="12"
+                               placeholder="Enter Aadhaar Number"
+                               required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Username</label>
+
+                        <input type="text"
+                               name="username"
+                               placeholder="Create Username"
+                               required>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Initial Deposit (₹)</label>
+
+                        <input type="number"
+                               name="balance"
+                               min="0"
+                               placeholder="Enter Initial Deposit"
+                               required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Password</label>
+
+                        <input type="password"
+                               name="password"
+                               placeholder="Create Password"
+                               required>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Confirm Password</label>
+
+                        <input type="password"
+                               name="confirm_password"
+                               placeholder="Confirm Password"
+                               required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Account Status</label>
+
+                        <select name="status">
+
+                            <option value="Active">Active</option>
+
+                            <option value="Inactive">Inactive</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br>
+                                <!-- Buttons -->
+
+                <button type="submit" class="save-btn">
+
+                    <i class="fas fa-user-plus"></i>
+
+                    Create Customer
+
+                </button>
+
+                &nbsp;
+
+                <a href="{{ url_for('admin.viewcustomers') }}"
+                   class="btn"
+                   style="display:inline-block;
+                          width:auto;
+                          padding:14px 25px;
+                          text-decoration:none;">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <!-- Information Cards -->
+
+        <div class="card-container">
+
+            <div class="card">
+
+                <h3>Total Customers</h3>
+
+                <h1>{{ total_customers if total_customers else 0 }}</h1>
+
+                <p>Registered Customers</p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Active Accounts</h3>
+
+                <h1>{{ active_customers if active_customers else 0 }}</h1>
+
+                <p>Currently Active</p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Today's Registrations</h3>
+
+                <h1>{{ today_customers if today_customers else 0 }}</h1>
+
+                <p>New Customers</p>
+
+            </div>
+
+        </div>
+
+        <div class="footer">
+
+            © 2026 Secure Bank | Add Customer
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

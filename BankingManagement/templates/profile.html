@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Profile | Secure Bank</title>
+
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+
+    <style>
+
+        /* =====================================================
+           PROFILE PHOTO
+           ===================================================== */
+
+        .profile-photo-area {
+            display: inline-block;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-photo {
+            width: 130px;
+            height: 130px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border: 4px solid #bb86fc;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.04);
+        }
+
+
+        /* =====================================================
+           PHOTO ACTION POPUP
+           ===================================================== */
+
+        .photo-action-modal {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.70);
+
+            z-index: 9998;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            box-sizing: border-box;
+        }
+
+
+        .photo-action-box {
+
+            position: relative;
+
+            width: 330px;
+
+            max-width: 90%;
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+
+            animation: photoPopup 0.2s ease;
+        }
+
+
+        @keyframes photoPopup {
+
+            from {
+                transform: scale(0.85);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+        }
+
+
+        .photo-action-box h3 {
+
+            margin-top: 0;
+
+            margin-bottom: 22px;
+
+            color: #333;
+        }
+
+
+        /* Close button */
+
+        .action-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: #eeeeee;
+            color: #333;
+            font-size: 23px;
+            cursor: pointer;
+        }
+
+        .action-close:hover {
+            background: #dddddd;
+        }
+        /* Action buttons */
+        .photo-action-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+           gap: 15px;
+        }
+        .photo-action-button {
+            width: 125px;
+            height: 95px;
+            border: none;
+            border-radius: 14px;
+            background: #6f42c1;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s ease;
+            box-sizing: border-box;
+        }
+        .photo-action-button i {
+            font-size: 27px;
+        }
+        .photo-action-button:hover {
+            background: #5b2fa3;
+            transform: scale(1.05);
+        }
+        /* =====================================================
+           FULL SCREEN PHOTO
+           ===================================================== */
+
+        .full-photo-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.94);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+           box-sizing: border-box;
+        }
+        .full-photo-modal img {
+            max-width: 95vw;
+            max-height: 92vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 5px 35px rgba(0, 0, 0, 0.6);
+        }
+        /* Full screen close */
+        .full-photo-close {
+            position: fixed;
+            top: 20px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 50%;
+            background: white;
+            color: #222;
+            font-size: 30px;
+            line-height: 45px;
+            cursor: pointer;
+            z-index: 10001;
+        }
+        .full-photo-close:hover {
+            background: #dddddd;
+        }
+        /* =====================================================
+           MOBILE RESPONSIVE
+           ===================================================== */
+        @media (max-width: 500px) {
+            .photo-action-box {
+                width: 300px;
+                padding: 22px;
+            }
+            .photo-action-button {
+                width: 110px;
+                height: 90px;
+            }
+            .full-photo-close {
+                top: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+<!-- =========================================================
+     LOGOUT MODAL
+     ========================================================= -->
+
+<div id="logoutModal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h3>Logout</h3>
+
+        <p>Are you sure you want to logout?</p>
+
+
+        <div class="logout-buttons">
+
+            <button type="button"
+                    class="logout-yes"
+                    onclick="confirmLogout()">
+
+                Yes
+
+            </button>
+
+
+            <button type="button"
+                    class="logout-no"
+                    onclick="closeLogoutPopup()">
+
+                No
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     PHOTO ACTION POPUP
+     ========================================================= -->
+
+<div id="photoActionModal"
+     class="photo-action-modal">
+
+    <div class="photo-action-box">
+
+
+        <!-- Close -->
+
+        <button type="button"
+                class="action-close"
+                onclick="closePhotoActions()">
+
+            &times;
+
+        </button>
+
+
+        <h3>Profile Photo</h3>
+
+
+        <div class="photo-action-buttons">
+
+
+            <!-- VIEW PHOTO -->
+
+            <button type="button"
+                    class="photo-action-button"
+                    onclick="viewProfilePhoto()">
+
+                <i class="fa-solid fa-eye"></i>
+
+                <span>View Photo</span>
+
+            </button>
+
+
+
+            <!-- CHANGE PHOTO -->
+
+            <label for="photoInput"
+                   class="photo-action-button">
+
+                <i class="fa-solid fa-camera"></i>
+
+                <span>Change Photo</span>
+
+            </label>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     FULL SCREEN PHOTO MODAL
+     ========================================================= -->
+
+<div id="fullPhotoModal"
+     class="full-photo-modal">
+
+
+    <!-- Close -->
+
+    <button type="button"
+            class="full-photo-close"
+            onclick="closeFullPhoto()">
+
+        &times;
+
+    </button>
+
+
+    <!-- Full Photo -->
+
+    <img id="fullPhoto"
+         src=""
+         alt="Profile Photo">
+
+
+</div>
+
+
+
+<!-- =========================================================
+     HIDDEN PHOTO UPLOAD FORM
+     ========================================================= -->
+
+<form id="photoForm"
+      action="{{ url_for('customer.profile') }}"
+      method="POST"
+      enctype="multipart/form-data">
+
+    <input type="file"
+           id="photoInput"
+           name="profile_photo"
+           accept=".jpg,.jpeg,.png,.webp"
+           hidden>
+
+</form>
+
+
+
+<!-- =========================================================
+     DASHBOARD CONTAINER
+     ========================================================= -->
+
+<div class="dashboard-container">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- Logo -->
+
+        <div class="logo">
+
+            <h2>💜 Secure Bank</h2>
+
+        </div>
+
+
+        <ul>
+
+
+            <!-- Dashboard -->
+
+            <li>
+
+                <a href="{{ url_for('customer.dashboard') }}">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+
+
+            <!-- My Profile -->
+
+            <li class="active">
+
+                <a href="{{ url_for('customer.profile') }}">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    My Profile
+
+                </a>
+
+            </li>
+
+
+
+            <!-- Account Details -->
+
+            <li>
+
+                <a href="{{ url_for('customer.accountdetails') }}">
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                    Account Details
+
+                </a>
+
+            </li>
+
+
+
+            <!-- Fund Transfer -->
+
+            <li>
+
+                <a href="{{ url_for('customer.fundtransfer') }}">
+
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+
+                    Fund Transfer
+
+                </a>
+
+            </li>
+
+
+
+            <!-- Transaction History -->
+
+            <li>
+
+                <a href="{{ url_for('customer.transactionhistory') }}">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    Transaction History
+
+                </a>
+
+            </li>
+
+
+
+            <!-- Apply Loan -->
+
+            <li>
+
+                <a href="{{ url_for('loan.applyloan') }}">
+
+                    <i class="fa-solid fa-file-circle-plus"></i>
+
+                    Apply Loan
+
+                </a>
+
+            </li>
+
+
+
+            <!-- Loan Status -->
+
+            <li>
+
+                <a href="{{ url_for('loan.loanstatus') }}">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Loan Status
+
+                </a>
+
+            </li>
+
+
+
+            <!-- Change Password -->
+
+            <li>
+
+                <a href="{{ url_for('customer.changepassword') }}">
+
+                    <i class="fa-solid fa-key"></i>
+
+                    Change Password
+
+                </a>
+
+            </li>
+
+
+
+            <!-- Logout -->
+
+            <li>
+
+                <a href="#"
+                   onclick="showLogoutPopup(); return false;">
+
+                    <i class="fas fa-right-from-bracket"></i>
+
+                    Logout
+
+                </a>
+
+            </li>
+
+
+        </ul>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content">
+
+
+        <h1 class="page-title">
+
+            My Profile
+
+        </h1>
+
+
+
+        <div class="profile-card">
+
+
+            <!-- =================================================
+                 PROFILE PHOTO
+                 ================================================= -->
+
+            <center>
+
+
+                <div class="profile-photo-area"
+                     onclick="openPhotoActions()">
+
+
+                    {% if customer.profile_photo %}
+
+                        <img id="profileImage"
+                             src="{{ url_for('static', filename=customer.profile_photo) }}"
+                             alt="Profile"
+                             class="profile-photo">
+
+                    {% else %}
+
+                        <img id="profileImage"
+                             src="{{ url_for('static', filename='images/profile.jpeg') }}"
+                             alt="Profile"
+                             class="profile-photo">
+
+                    {% endif %}
+
+
+                </div>
+
+
+
+                <br><br>
+
+
+                <!-- Customer Name -->
+
+                <h2>
+
+                    {{ customer.full_name }}
+
+                </h2>
+
+
+                <!-- Customer ID -->
+
+                <p>
+
+                    Customer ID : {{ customer.customer_id }}
+
+                </p>
+
+
+            </center>
+
+
+
+            <br>
+
+            <hr>
+
+            <br>
+
+
+
+            <!-- =================================================
+                 PROFILE INFORMATION
+                 ================================================= -->
+
+            <div class="profile-info">
+
+
+                <!-- Full Name -->
+
+                <div class="info-box">
+
+                    <label>Full Name</label>
+
+                    <p>
+
+                        {{ customer.full_name }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Email -->
+
+                <div class="info-box">
+
+                    <label>Email Address</label>
+
+                    <p>
+
+                        {{ customer.email }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Mobile -->
+
+                <div class="info-box">
+
+                    <label>Mobile Number</label>
+
+                    <p>
+
+                        {{ customer.mobile }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Username -->
+
+                <div class="info-box">
+
+                    <label>Username</label>
+
+                    <p>
+
+                        {{ customer.username }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Gender -->
+
+                <div class="info-box">
+
+                    <label>Gender</label>
+
+                    <p>
+
+                        {{ customer.gender }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Date of Birth -->
+
+                <div class="info-box">
+
+                    <label>Date of Birth</label>
+
+                    <p>
+
+                        {{ customer.date_of_birth }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Account Type -->
+
+                <div class="info-box">
+
+                    <label>Account Type</label>
+
+                    <p>
+
+                        {{ customer.account_type }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Address -->
+
+                <div class="info-box">
+
+                    <label>Address</label>
+
+                    <p>
+
+                        {{ customer.address }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Created Date -->
+
+                <div class="info-box">
+
+                    <label>Created Date</label>
+
+                    <p>
+
+                        {{ customer.created_date }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Account Number -->
+
+                <div class="info-box">
+
+                    <label>Account Number</label>
+
+                    <p>
+
+                        {% if account %}
+
+                            {{ account.account_number }}
+
+                        {% else %}
+
+                            Not Available
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Branch -->
+
+                <div class="info-box">
+
+                    <label>Branch</label>
+
+                    <p>
+
+                        {% if account %}
+
+                            {{ account.branch_name }}
+
+                        {% else %}
+
+                            Not Available
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- IFSC -->
+
+                <div class="info-box">
+
+                    <label>IFSC Code</label>
+
+                    <p>
+
+                        {% if account %}
+
+                            {{ account.ifsc_code }}
+
+                        {% else %}
+
+                            Not Available
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Balance -->
+
+                <div class="info-box">
+
+                    <label>Available Balance</label>
+
+                    <p>
+
+                        ₹
+
+                        {% if account %}
+
+                            {{ account.balance }}
+
+                        {% else %}
+
+                            0.00
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- Account Status -->
+
+                <div class="info-box">
+
+                    <label>Account Status</label>
+
+                    <p class="status-active">
+
+                        {% if account %}
+
+                            {{ account.account_status }}
+
+                        {% else %}
+
+                            Active
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <br>
+
+
+
+            <!-- =================================================
+                 ACTION BUTTON
+                 ================================================= -->
+
+            <div class="action-buttons">
+
+
+                <a href="{{ url_for('customer.update') }}">
+
+                    <i class="fas fa-user-edit"></i>
+
+                    Update Profile
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+function showLogoutPopup() {
+
+    document.getElementById("logoutModal").style.display = "flex";
+
+}
+
+
+function closeLogoutPopup() {
+
+    document.getElementById("logoutModal").style.display = "none";
+
+}
+
+
+function confirmLogout() {
+
+    window.location.href =
+        "{{ url_for('customer.logout') }}";
+
+}
+
+
+
+/* =========================================================
+   OPEN PHOTO ACTION POPUP
+   ========================================================= */
+
+function openPhotoActions() {
+
+    document.getElementById("photoActionModal").style.display = "flex";
+
+}
+
+
+
+/* =========================================================
+   CLOSE PHOTO ACTION POPUP
+   ========================================================= */
+
+function closePhotoActions() {
+
+    document.getElementById("photoActionModal").style.display = "none";
+
+}
+
+
+
+/* =========================================================
+   VIEW PROFILE PHOTO - FULL SCREEN
+   ========================================================= */
+
+function viewProfilePhoto() {
+
+
+    const profileImage =
+        document.getElementById("profileImage");
+
+
+    const fullPhoto =
+        document.getElementById("fullPhoto");
+
+
+    const fullPhotoModal =
+        document.getElementById("fullPhotoModal");
+
+
+    /* Set current profile photo */
+
+    fullPhoto.src = profileImage.src;
+
+
+    /* Close small popup */
+
+    closePhotoActions();
+
+
+    /* Open full screen */
+
+    fullPhotoModal.style.display = "flex";
+
+
+}
+
+
+
+/* =========================================================
+   CLOSE FULL SCREEN PHOTO
+   ========================================================= */
+
+function closeFullPhoto() {
+
+    document.getElementById("fullPhotoModal").style.display = "none";
+
+}
+/* =========================================================
+   CAMERA → FILE MANAGER → UPLOAD
+   ========================================================= */
+document.getElementById("photoInput").addEventListener(
+    "change",
+    function () {
+        if (this.files && this.files.length > 0) {
+            /* Automatically submit */
+            document.getElementById("photoForm").submit();
+        }
+    }
+);
+/* =========================================================
+   CLICK OUTSIDE PHOTO ACTION POPUP
+   ========================================================= */
+document.getElementById("photoActionModal").addEventListener(
+    "click",
+    function(event) {
+        if (event.target === this) {
+            closePhotoActions();
+        }
+    }
+);
+/* =========================================================
+   CLICK OUTSIDE FULL SCREEN PHOTO
+   ========================================================= */
+document.getElementById("fullPhotoModal").addEventListener(
+    "click",
+    function(event) {
+        if (event.target === this) {
+            closeFullPhoto();
+        }
+    }
+);
+/* =========================================================
+   ESC KEY
+   ========================================================= */
+document.addEventListener(
+    "keydown",
+    function(event) {
+        if (event.key === "Escape") {
+            closePhotoActions();
+            closeFullPhoto();
+            closeLogoutPopup();
+        }
+    }
+);
+</script>
+</body>
+</html>

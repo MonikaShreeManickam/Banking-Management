@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Logout | Secure Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="form-box">
+        <div class="logo">
+            <h1>
+                <i class="fas fa-university"></i>
+                <span>Secure</span> Bank
+            </h1>
+        </div>
+        <center>
+            <i class="fas fa-user-shield"
+               style="font-size:80px;color:#bb86fc;"></i>
+            <br><br>
+            <h2>
+                Administrator Logout
+            </h2>
+            <p style="color:#cccccc;">
+                Are you sure you want to logout from the Admin Panel?
+            </p>
+            <br>
+            <div class="balance-card"
+                 style="padding:15px;">
+                <h3>
+                    <i class="fas fa-shield-halved"></i>
+                    Security Notice
+                </h3>
+                <p>
+                    Logging out will end your current administrator session.
+                    You must log in again to access the Admin Dashboard.
+                </p>
+            </div>
+            <br>
+            <a href="{{ url_for('admin.adminlogin') }}"
+   class="btn"
+   style="display:inline-block;
+          width:180px;
+          text-decoration:none;">
+    <i class="fas fa-right-from-bracket"></i>
+    Yes, Logout
+</a>
+
+&nbsp;
+
+<a href="{{ url_for('admin.admindashboard') }}"
+   class="btn"
+   style="display:inline-block;
+          width:180px;
+          text-decoration:none;
+          background:linear-gradient(45deg,#444,#666);">
+    <i class="fas fa-arrow-left"></i>
+    Cancel
+</a>
+        </center>
+        <br>
+        <div class="table-box">
+            <table>
+                <tr>
+                    <th>Session Status</th>
+                    <th>Access Level</th>
+                </tr>
+                <tr>
+                    <td class="status-success">
+                        Active Session
+                    </td>
+                    <td>
+                        Administrator
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="footer">
+            © 2026 Secure Bank
+            <br>
+            Administrator Control Panel
+        </div>
+    </div>
+</div>
+</body>
+</html>

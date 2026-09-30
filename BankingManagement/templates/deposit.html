@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Deposit Money | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>💜 Secure Bank</h2>
+
+        </div>
+
+        <ul>
+
+            <li>
+                <a href="{{ url_for('customer.dashboard') }}">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('customer.profile') }}">
+                    <i class="fas fa-user"></i>
+                    My Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('customer.accountdetails') }}">
+                    <i class="fas fa-credit-card"></i>
+                    Account Details
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('customer.transactionhistory') }}">
+                    <i class="fas fa-clock-rotate-left"></i>
+                    Transaction History
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('customer.deposit') }}"
+                   class="active">
+
+                    <i class="fas fa-money-bill-wave"></i>
+
+                    Deposit
+
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('customer.logout') }}">
+                    <i class="fas fa-right-from-bracket"></i>
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+        <h1 class="page-title">
+
+            Deposit Money
+
+        </h1>
+
+        {% with messages=get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+
+        <div class="flash-message">
+
+            {{ message }}
+
+        </div>
+
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Balance -->
+
+        <div class="balance-card">
+
+            <h2>Current Balance</h2>
+
+            <h1>
+
+                ₹
+
+                {% if account %}
+                    {{ account.balance }}
+                {% else %}
+                    0.00
+                {% endif %}
+
+            </h1>
+
+            <p>Deposit money securely into your account.</p>
+
+        </div>
+
+        <!-- Deposit Form -->
+
+        <div class="profile-grid">
+            <div class="info-box">
+                <label>Amount</label>
+                <input
+                type="number"
+                name="amount">
+            </div>
+            
+            <div class="info-box">
+                <label>Description</label>
+                <textarea
+                name="description"></textarea>
+            </div>
+        </div>
+
+            <form action="{{ url_for('customer.deposit') }}"
+                  method="POST">
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Account Number</label>
+
+                        <input
+                            type="text"
+                            name="account_number"
+                            value="{{ account.account_number }}"
+                            readonly>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Customer Name</label>
+
+                        <input
+                            type="text"
+                            value="{{ customer.full_name }}"
+                            readonly>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-row">
+
+                    <div class="form-control">
+
+                        <label>Deposit Amount</label>
+
+                        <input
+                            type="number"
+                            name="amount"
+                            min="1"
+                            placeholder="Enter Deposit Amount"
+                            required>
+
+                    </div>
+
+                    <div class="form-control">
+
+                        <label>Deposit Date</label>
+
+                        <input
+                            type="date"
+                            name="deposit_date"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-control">
+
+                    <label>Remarks</label>
+
+                    <textarea
+                        name="remarks"
+                        placeholder="Remarks (Optional)">
+                    </textarea>
+
+                </div>
+
+                <br>
+
+                <button
+                    type="submit"
+                    class="save-btn">
+
+                    <i class="fas fa-circle-plus"></i>
+
+                    Deposit Money
+
+                </button>
+
+                <a href="{{ url_for('customer.dashboard') }}"
+                   class="btn">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Dashboard
+
+                </a>
+
+            </form>
+
+        </div>
+
+        <!-- Deposit History -->
+
+        <div class="table-box">
+
+            <h2>
+
+                Recent Deposits
+
+            </h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Amount</th>
+
+                    <th>Remarks</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+                {% if transactions %}
+
+                {% for t in transactions %}
+
+                <tr>
+
+                    <td>{{ t.transaction_date }}</td>
+
+                    <td>₹ {{ t.amount }}</td>
+
+                    <td>{{ t.description }}</td>
+
+                    <td>{{ t.status }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="4">
+
+                        No Deposit History Found
+
+                    </td>
+
+                </tr>
+
+                {% endif %}
+
+            </table>
+
+        </div>
+
+        <div class="footer">
+
+            © 2026 Secure Bank | Banking Management System
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

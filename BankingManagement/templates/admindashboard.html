@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+<!--============Logout Model==========-->
+
+<div id="logoutModal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h3>Logout</h3>
+
+        <p>Are you sure you want to logout?</p>
+
+        <div class="logout-buttons">
+
+            <button type="button"
+                    class="logout-yes"
+                    onclick="confirmLogout()">
+                Yes
+            </button>
+
+            <button type="button"
+                    class="logout-no"
+                    onclick="closeLogoutPopup()">
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<!--==========JScript for logout======-->
+
+<script>
+
+function showLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "flex";
+}
+
+function closeLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "none";
+}
+
+function confirmLogout() {
+    window.location.href = "{{ url_for('customer.logout') }}";
+}
+
+</script>
+
+<body>
+
+<div class="dashboard">
+
+
+<!-- ================= Sidebar ================= -->
+<div class="sidebar">
+
+    <h2>
+        💜 <span>Secure</span> Bank
+    </h2>
+
+    <ul>
+
+        <li class="active">
+            <a href="{{ url_for('admin.admindashboard') }}">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </a>
+        </li>
+
+
+        <li>
+            <a href="{{ url_for('admin.adminprofile') }}">
+                <i class="fas fa-user-shield"></i>
+                Admin Profile
+            </a>
+        </li>
+
+
+        <li>
+            <a href="{{ url_for('admin.viewcustomers') }}">
+                <i class="fas fa-users"></i>
+                View Customers
+            </a>
+        </li>
+
+
+        <li>
+            <a href="{{ url_for('admin.addcustomer') }}">
+                <i class="fas fa-user-plus"></i>
+                Add Customer
+            </a>
+        </li>
+
+
+        <li>
+            <a href="{{ url_for('admin.viewtransactions') }}">
+                <i class="fas fa-money-check-dollar"></i>
+                Transactions
+            </a>
+        </li>
+
+
+        <li>
+            <a href="{{ url_for('loan.loanapplications') }}">
+                <i class="fas fa-file-signature"></i>
+                Loan Applications
+            </a>
+        </li>
+
+
+        <!-- Change Password -->
+        <li>
+            <a href="{{ url_for('admin.adminchangepassword') }}">
+                <i class="fas fa-key"></i>
+                Change Password
+            </a>
+        </li>
+
+
+        <li>
+            <a href="{{ url_for('admin.reports') }}">
+                <i class="fas fa-chart-pie"></i>
+                Reports
+            </a>
+        </li>
+
+
+        <!-- Logout -->
+        <li>
+    <a href="#" onclick="showLogoutPopup(); return false;">
+        <i class="fas fa-right-from-bracket"></i>
+        Logout
+    </a>
+</li>
+
+    </ul>
+
+</div>
+
+
+<!-- ================= Main Content ================= -->
+<div class="main-content">
+
+
+    <!-- Header -->
+    <div class="header">
+
+        <h1>
+            Welcome, {{ admin.admin_name }} 👋
+        </h1>
+
+        <div class="user-box">
+
+            Admin ID :
+
+            <strong>
+                {{ admin.admin_id }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= Dashboard Cards ================= -->
+
+    <div class="card-container">
+
+
+        <div class="card">
+
+            <h3>
+                Total Customers
+            </h3>
+
+            <h1>
+                {{ total_customers }}
+            </h1>
+
+            <p>
+                Registered Customers
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                Total Accounts
+            </h3>
+
+            <h1>
+                {{ total_accounts }}
+            </h1>
+
+            <p>
+                Active Bank Accounts
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                Transactions
+            </h3>
+
+            <h1>
+                {{ total_transactions }}
+            </h1>
+
+            <p>
+                Bank Transactions
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                Total Loans
+            </h3>
+
+            <h1>
+                {{ total_loans }}
+            </h1>
+
+            <p>
+                Loan Applications
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ================= Quick Actions ================= -->
+
+    <div class="action-buttons">
+
+
+        <a href="{{ url_for('admin.viewcustomers') }}">
+
+            <i class="fas fa-users"></i>
+
+            View Customers
+
+        </a>
+
+
+        <a href="{{ url_for('loan.loanapplications') }}">
+
+            <i class="fas fa-file-signature"></i>
+
+            Loan Applications
+
+        </a>
+
+
+        <a href="{{ url_for('admin.reports') }}">
+
+            <i class="fas fa-chart-pie"></i>
+
+            Reports
+
+        </a>
+
+
+    </div>
+
+
+    <!-- ================= Recent Activities ================= -->
+
+    <div class="table-box">
+
+        <h2>
+            Recent Banking Activities
+        </h2>
+
+
+        <div class="table-responsive">
+
+            <table>
+
+                <tr>
+
+                    <th>
+                        Date
+                    </th>
+
+                    <th>
+                        Customer
+                    </th>
+
+                    <th>
+                        Activity
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+
+                {% for activity in activities %}
+
+                <tr>
+
+                    <td>
+                        {{ activity.date }}
+                    </td>
+
+
+                    <td>
+                        {{ activity.customer_name }}
+                    </td>
+
+
+                    <td>
+                        {{ activity.activity }}
+                    </td>
+
+
+                    <td>
+
+
+                        {% if activity.status == "Success" %}
+
+                        <span class="status-success">
+                            {{ activity.status }}
+                        </span>
+
+
+                        {% else %}
+
+                        <span class="status-pending">
+                            {{ activity.status }}
+                        </span>
+
+                        {% endif %}
+
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= Loan Overview ================= -->
+
+    <div class="profile-card">
+
+
+        <h2>
+            Loan Overview
+        </h2>
+
+
+        <div class="profile-info">
+
+
+            <div class="info-box">
+
+                <label>
+                    Pending Loans
+                </label>
+
+                <p>
+                    {{ pending_loans }}
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <label>
+                    Approved Loans
+                </label>
+
+                <p>
+                    {{ approved_loans }}
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <label>
+                    Rejected Loans
+                </label>
+
+                <p>
+                    {{ rejected_loans }}
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <label>
+                    Approval Rate
+                </label>
+
+                <p style="color:#00ff99;">
+                    {{ approval_rate }} %
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= Footer ================= -->
+
+    <div class="footer">
+
+        © 2026 Secure Bank | Admin Dashboard
+
+    </div>
+
+
+</div>
+
+</div>
+
+</body>
+</html>

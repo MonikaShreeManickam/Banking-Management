@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Profile | Secure Bank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+
+    <style>
+
+        /* =====================================================
+           PROFILE PHOTO
+        ===================================================== */
+
+        .profile-photo-area {
+            display: inline-block;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-photo {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #bb86fc;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.04);
+        }
+
+
+        /* =====================================================
+           PHOTO ACTION POPUP
+        ===================================================== */
+
+        .photo-action-modal {
+            display: none;
+
+            position: fixed;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.70);
+
+            z-index: 9998;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+
+        .photo-action-box {
+
+            position: relative;
+
+            width: 330px;
+            max-width: 90%;
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+
+            animation: photoPopup 0.2s ease;
+        }
+
+
+        @keyframes photoPopup {
+
+            from {
+                transform: scale(0.85);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+        }
+
+
+        .photo-action-box h3 {
+
+            margin-top: 0;
+            margin-bottom: 22px;
+
+            color: #333;
+        }
+
+
+        /* =====================================================
+           CLOSE BUTTON
+        ===================================================== */
+
+        .action-close {
+
+            position: absolute;
+
+            top: 10px;
+            right: 12px;
+
+            width: 32px;
+            height: 32px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: #eee;
+
+            color: #333;
+
+            font-size: 23px;
+
+            cursor: pointer;
+        }
+
+
+        .action-close:hover {
+            background: #ddd;
+        }
+
+
+        /* =====================================================
+           ACTION BUTTONS
+        ===================================================== */
+
+        .photo-action-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .photo-action-button {
+
+            width: 125px;
+            height: 95px;
+
+            border: none;
+
+            border-radius: 14px;
+
+            background: #6f42c1;
+
+            color: #fff;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 9px;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s ease;
+
+            box-sizing: border-box;
+        }
+
+
+        .photo-action-button i {
+            font-size: 27px;
+        }
+
+
+        .photo-action-button:hover {
+
+            background: #5b2fa3;
+
+            transform: scale(1.05);
+        }
+
+
+        /* =====================================================
+           FULL SCREEN PHOTO
+        ===================================================== */
+
+        .full-photo-modal {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.94);
+
+            z-index: 10000;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            box-sizing: border-box;
+        }
+
+
+        .full-photo-modal img {
+
+            max-width: 95vw;
+
+            max-height: 92vh;
+
+            width: auto;
+
+            height: auto;
+
+            object-fit: contain;
+
+            border-radius: 10px;
+
+            box-shadow: 0 5px 35px rgba(0, 0, 0, 0.6);
+        }
+
+
+        .full-photo-close {
+
+            position: fixed;
+
+            top: 20px;
+            right: 25px;
+
+            width: 45px;
+            height: 45px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: #fff;
+
+            color: #222;
+
+            font-size: 30px;
+
+            line-height: 45px;
+
+            cursor: pointer;
+
+            z-index: 10001;
+        }
+
+
+        .full-photo-close:hover {
+            background: #ddd;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width: 500px) {
+
+            .photo-action-box {
+
+                width: 300px;
+
+                padding: 22px;
+            }
+
+            .photo-action-button {
+
+                width: 110px;
+
+                height: 90px;
+            }
+
+            .full-photo-close {
+
+                top: 15px;
+
+                right: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+<!--============Logout Model==========-->
+
+<div id="logoutModal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h3>Logout</h3>
+
+        <p>Are you sure you want to logout?</p>
+
+        <div class="logout-buttons">
+
+            <button type="button"
+                    class="logout-yes"
+                    onclick="confirmLogout()">
+                Yes
+            </button>
+
+            <button type="button"
+                    class="logout-no"
+                    onclick="closeLogoutPopup()">
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<!--==========JScript for logout======-->
+
+<script>
+
+function showLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "flex";
+}
+
+function closeLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "none";
+}
+
+function confirmLogout() {
+    window.location.href = "{{ url_for('customer.logout') }}";
+}
+
+</script>
+
+<body>
+
+
+<!-- =========================================================
+     PHOTO ACTION POPUP
+========================================================= -->
+
+<div id="photoActionModal"
+     class="photo-action-modal">
+
+    <div class="photo-action-box">
+
+        <button type="button"
+                class="action-close"
+                onclick="closePhotoActions()">
+
+            &times;
+
+        </button>
+
+
+        <h3>Admin Profile Photo</h3>
+
+
+        <div class="photo-action-buttons">
+
+
+            <!-- VIEW PHOTO -->
+
+            <button type="button"
+                    class="photo-action-button"
+                    onclick="viewProfilePhoto()">
+
+                <i class="fa-solid fa-eye"></i>
+
+                <span>View Photo</span>
+
+            </button>
+
+
+            <!-- CHANGE PHOTO -->
+
+            <label for="photoInput"
+                   class="photo-action-button">
+
+                <i class="fa-solid fa-camera"></i>
+
+                <span>Change Photo</span>
+
+            </label>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     FULL SCREEN PHOTO MODAL
+========================================================= -->
+
+<div id="fullPhotoModal"
+     class="full-photo-modal">
+
+
+    <button type="button"
+            class="full-photo-close"
+            onclick="closeFullPhoto()">
+
+        &times;
+
+    </button>
+
+
+    <img id="fullPhoto"
+         src=""
+         alt="Admin Profile Photo">
+
+</div>
+
+
+
+<!-- =========================================================
+     PHOTO UPLOAD FORM
+========================================================= -->
+
+<form id="photoForm"
+      action="{{ url_for('admin.adminprofile') }}"
+      method="POST"
+      enctype="multipart/form-data">
+
+    <input type="file"
+           id="photoInput"
+           name="profile_photo"
+           accept=".jpg,.jpeg,.png,.webp"
+           hidden>
+
+</form>
+
+
+
+<!-- =========================================================
+     DASHBOARD
+========================================================= -->
+
+<div class="dashboard">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ===================================================== -->
+
+    <div class="sidebar">
+
+        <h2>
+            💜 <span>Secure</span> Bank
+        </h2>
+
+
+        <ul>
+
+
+            <li>
+
+                <a href="{{ url_for('admin.admindashboard') }}">
+
+                    <i class="fas fa-home"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+
+            <li class="active">
+
+                <a href="{{ url_for('admin.adminprofile') }}">
+
+                    <i class="fas fa-user-shield"></i>
+
+                    Admin Profile
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('admin.viewcustomers') }}">
+
+                    <i class="fas fa-users"></i>
+
+                    View Customers
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('admin.addcustomer') }}">
+
+                    <i class="fas fa-user-plus"></i>
+
+                    Add Customer
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('admin.viewtransactions') }}">
+
+                    <i class="fas fa-money-check-dollar"></i>
+
+                    Transactions
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('loan.loanapplications') }}">
+
+                    <i class="fas fa-file-signature"></i>
+
+                    Loan Applications
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('loan.loanapplications') }}">
+    <i class="fas fa-file-signature"></i>
+    Loan Applications
+</a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('admin.adminchangepassword') }}">
+                    <i class="fas fa-key"></i>
+                        Change Password
+                </a>
+            </li>
+
+
+            <li>
+
+                <a href="{{ url_for('admin.reports') }}">
+
+                    <i class="fas fa-chart-pie"></i>
+
+                    Reports
+
+                </a>
+
+            </li>
+
+
+        <li>
+    <a href="#" onclick="showLogoutPopup(); return false;">
+        <i class="fas fa-right-from-bracket"></i>
+        Logout
+    </a>
+</li>
+
+
+        </ul>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ===================================================== -->
+
+    <div class="main-content">
+
+
+        <h1 class="page-title">
+
+            Administrator Profile
+
+        </h1>
+
+
+
+        <div class="profile-card">
+
+
+            <!-- =================================================
+                 PROFILE PHOTO
+            ================================================= -->
+
+            <center>
+
+
+                <div class="profile-photo-area"
+                     onclick="openPhotoActions()">
+
+
+                    {% if admin.profile_photo %}
+
+                        <img id="profileImage"
+
+                             src="{{ url_for('static', filename=admin.profile_photo) }}"
+
+                             alt="Admin Profile"
+
+                             class="profile-photo">
+
+                    {% else %}
+
+                        <img id="profileImage"
+
+                             src="{{ url_for('static', filename='images/admin.png') }}"
+
+                             alt="Admin Profile"
+
+                             class="profile-photo">
+
+                    {% endif %}
+
+
+                </div>
+
+
+                <br>
+                <br>
+
+
+                <h2 style="color:white;">
+
+                    {{ admin.admin_name }}
+
+                </h2>
+
+
+                <p style="color:#cccccc;">
+
+                    Administrator ID :
+
+                    {{ admin.admin_id }}
+
+                </p>
+
+
+            </center>
+
+
+            <br>
+
+
+            <div class="profile-info">
+
+
+                <!-- Admin Name -->
+
+                <div class="info-box">
+
+                    <label>Admin Name</label>
+
+                    <p>
+                        {{ admin.admin_name }}
+                    </p>
+
+                </div>
+
+
+                <!-- Admin ID -->
+
+                <div class="info-box">
+
+                    <label>Admin ID</label>
+
+                    <p>
+                        {{ admin.admin_id }}
+                    </p>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="info-box">
+
+                    <label>Email Address</label>
+
+                    <p>
+                        {{ admin.email }}
+                    </p>
+
+                </div>
+
+
+                <!-- Mobile -->
+
+                <div class="info-box">
+
+                    <label>Mobile Number</label>
+
+                    <p>
+                        {{ admin.mobile }}
+                    </p>
+
+                </div>
+
+
+                <!-- Role -->
+
+                <div class="info-box">
+
+                    <label>Role</label>
+
+                    <p>
+                        {{ admin.role }}
+                    </p>
+
+                </div>
+
+
+                <!-- Department -->
+
+                <div class="info-box">
+
+                    <label>Department</label>
+
+                    <p>
+                        {{ admin.role }}
+                    </p>
+
+                </div>
+
+
+                <!-- Branch -->
+
+                <div class="info-box">
+
+                    <label>Branch</label>
+
+                    <p>
+                        {{ admin.branch }}
+                    </p>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="info-box">
+
+                    <label>Status</label>
+
+                    <p class="status-success">
+
+                        {{ admin.status }}
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <br>
+
+
+            <!-- =================================================
+                 ACTION BUTTONS
+            ================================================= -->
+
+            <div class="action-buttons">
+
+
+                <a href="{{ url_for('admin.admindashboard') }}">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Dashboard
+
+                </a>
+
+
+                <a href="{{ url_for('admin.viewcustomers') }}">
+
+                    <i class="fas fa-users"></i>
+
+                    View Customers
+
+                </a>
+
+
+                <a href="{{ url_for('admin.adminchangepassword') }}">
+
+                    <i class="fas fa-key"></i>
+
+                    Change Password
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =====================================================
+             FOOTER
+        ===================================================== -->
+
+        <div class="footer">
+
+            © 2026 Secure Bank | Administrator Profile
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   OPEN PHOTO ACTIONS
+========================================================= */
+
+function openPhotoActions() {
+
+    document.getElementById("photoActionModal").style.display = "flex";
+
+}
+
+
+
+/* =========================================================
+   CLOSE PHOTO ACTIONS
+========================================================= */
+
+function closePhotoActions() {
+
+    document.getElementById("photoActionModal").style.display = "none";
+
+}
+
+
+
+/* =========================================================
+   VIEW FULL PHOTO
+========================================================= */
+
+function viewProfilePhoto() {
+
+    const profileImage =
+        document.getElementById("profileImage");
+
+    const fullPhoto =
+        document.getElementById("fullPhoto");
+
+    const fullPhotoModal =
+        document.getElementById("fullPhotoModal");
+
+
+    fullPhoto.src = profileImage.src;
+
+
+    closePhotoActions();
+
+
+    fullPhotoModal.style.display = "flex";
+
+}
+
+
+
+/* =========================================================
+   CLOSE FULL PHOTO
+========================================================= */
+
+function closeFullPhoto() {
+
+    document.getElementById("fullPhotoModal").style.display = "none";
+
+}
+
+
+
+/* =========================================================
+   PHOTO FILE SELECT
+========================================================= */
+
+document.getElementById("photoInput").addEventListener(
+    "change",
+    function() {
+
+        if (this.files && this.files.length > 0) {
+
+            document.getElementById("photoForm").submit();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   CLICK OUTSIDE PHOTO POPUP
+========================================================= */
+
+document.getElementById("photoActionModal").addEventListener(
+    "click",
+    function(event) {
+
+        if (event.target === this) {
+
+            closePhotoActions();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   CLICK OUTSIDE FULL PHOTO
+========================================================= */
+
+document.getElementById("fullPhotoModal").addEventListener(
+    "click",
+    function(event) {
+
+        if (event.target === this) {
+
+            closeFullPhoto();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Escape") {
+
+            closePhotoActions();
+
+            closeFullPhoto();
+
+        }
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

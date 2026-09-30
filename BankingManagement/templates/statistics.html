@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Statistics</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+        }
+
+        .customers {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .loans {
+            background: #ede7f6;
+            color: #673ab7;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .approved {
+            background: #d4edda;
+            color: #218838;
+        }
+
+        .rejected {
+            background: #f8d7da;
+            color: #c82333;
+        }
+
+        .amount {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .stat-info h3 {
+            font-size: 15px;
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        .stat-info p {
+            font-size: 27px;
+            font-weight: bold;
+            color: #222;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+
+            padding: 10px 20px;
+
+            background: #333;
+            color: white;
+
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-btn:hover {
+            background: #111;
+        }
+
+        @media (max-width: 900px) {
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="page-title">
+        <i class="fas fa-chart-pie"></i>
+        Statistics
+    </div>
+
+
+    <div class="stats-grid">
+
+
+        <!-- Total Customers -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon customers">
+                <i class="fas fa-users"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <h3>Total Customers</h3>
+
+                <p>{{ total_customers }}</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Total Loans -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon loans">
+                <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <h3>Total Loan Applications</h3>
+
+                <p>{{ total_loans }}</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Pending Loans -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon pending">
+                <i class="fas fa-clock"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <h3>Pending Loans</h3>
+
+                <p>{{ pending_loans }}</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Approved Loans -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon approved">
+                <i class="fas fa-circle-check"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <h3>Approved Loans</h3>
+
+                <p>{{ approved_loans }}</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Rejected Loans -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon rejected">
+                <i class="fas fa-circle-xmark"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <h3>Rejected Loans</h3>
+
+                <p>{{ rejected_loans }}</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Approved Loan Amount -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon amount">
+                <i class="fas fa-indian-rupee-sign"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <h3>Approved Loan Amount</h3>
+
+                <p>₹ {{ approved_amount }}</p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <a href="{{ url_for('admin.admindashboard') }}"
+       class="back-btn">
+
+        <i class="fas fa-arrow-left"></i>
+        Back to Dashboard
+
+    </a>
+
+</div>
+
+</body>
+
+</html>

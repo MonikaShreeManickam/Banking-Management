@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>View Transactions | Secure Bank Admin</title>
+
+<link rel="stylesheet" href="{{ url_for('static',filename='css/dashboard.css') }}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<!-- ================= Sidebar ================= -->
+
+<div class="sidebar">
+
+<h2>💜 <span>Secure</span> Bank</h2>
+
+<ul>
+
+<li>
+<a href="{{ url_for('admin.admindashboard') }}">
+<i class="fas fa-home"></i>
+Dashboard
+</a>
+</li>
+
+<li>
+<a href="{{ url_for('admin.adminprofile') }}">
+<i class="fas fa-user-shield"></i>
+Admin Profile
+</a>
+</li>
+
+<li>
+<a href="{{ url_for('admin.viewcustomers') }}">
+<i class="fas fa-users"></i>
+View Customers
+</a>
+</li>
+
+<li>
+<a href="{{ url_for('admin.addcustomer') }}">
+<i class="fas fa-user-plus"></i>
+Add Customer
+</a>
+</li>
+
+<li class="active">
+<a href="{{ url_for('admin.viewtransactions') }}">
+<i class="fas fa-money-check-dollar"></i>
+Transactions
+</a>
+</li>
+
+<li>
+<a href="{{ url_for('loan.loanapplications') }}">
+<i class="fas fa-file-signature"></i>
+Loan Applications
+</a>
+</li>
+
+<li>
+    <a href="{{ url_for('admin.adminchangepassword') }}">
+        <i class="fas fa-lock"></i>
+        Change Password
+    </a>
+</li>
+
+<li>
+<a href="{{ url_for('admin.reports') }}">
+<i class="fas fa-chart-pie"></i>
+Reports
+</a>
+</li>
+
+<li>
+    <a href="#" onclick="showLogoutPopup(); return false;">
+        <i class="fas fa-right-from-bracket"></i>
+        Logout
+    </a>
+</li>
+
+</ul>
+
+</div>
+
+<!-- ================= Main Content ================= -->
+
+<div class="main-content">
+
+<h1 class="page-title">
+Transaction Management
+</h1>
+
+<div class="form-section">
+
+<form action="{{ url_for('admin.viewtransactions') }}" method="GET">
+
+<div class="form-row">
+
+<div class="form-control">
+
+<label>Search Transaction</label>
+
+<input
+type="text"
+name="search"
+placeholder="Transaction ID / Customer Name / Account Number">
+
+</div>
+
+</div>
+
+<br>
+
+<button type="submit" class="save-btn">
+
+<i class="fas fa-search"></i>
+
+Search
+
+</button>
+
+</form>
+
+</div>
+
+<br>
+
+<div class="card-container">
+
+<div class="card">
+<h3>Total Transactions</h3>
+<h1>{{ total_transactions }}</h1>
+<p>Completed Transactions</p>
+</div>
+
+<div class="card">
+<h3>Total Deposits</h3>
+<h1>₹ {{ total_deposit }}</h1>
+<p>Total Deposited Amount</p>
+</div>
+
+<div class="card">
+<h3>Total Withdrawals</h3>
+<h1>₹ {{ total_withdraw }}</h1>
+<p>Total Withdraw Amount</p>
+</div>
+
+<div class="card">
+<h3>Fund Transfers</h3>
+<h1>{{ total_transfer }}</h1>
+<p>Completed Transfers</p>
+</div>
+
+</div>
+
+<br>
+
+<div class="table-box">
+
+<h2>Recent Transactions</h2>
+
+<table>
+
+<tr>
+
+<th>Transaction ID</th>
+
+<th>Customer</th>
+
+<th>Account No</th>
+
+<th>Type</th>
+
+<th>Amount</th>
+
+<th>Date</th>
+
+<th>Status</th>
+
+</tr>
+<!-- Transactions Table -->
+<div class="table-box">
+    <h2>Recent Transactions</h2>
+
+    <table>
+
+        <tr>
+            <th>Transaction ID</th>
+            <th>Customer</th>
+            <th>Account No</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+
+        {% for transaction in transactions %}
+
+        <tr>
+
+            <td>{{ transaction.transaction_id }}</td>
+
+            <td>{{ transaction.customer_name }}</td>
+
+            <td>{{ transaction.account_number }}</td>
+
+            <td>{{ transaction.transaction_type }}</td>
+
+            <td>₹ {{ transaction.amount }}</td>
+
+            <td>{{ transaction.transaction_date }}</td>
+
+            <td>
+
+                {% if transaction.status == "Success" %}
+
+                <span class="status-success">
+                    {{ transaction.status }}
+                </span>
+
+                {% elif transaction.status == "Pending" %}
+
+                <span class="status-pending">
+                    {{ transaction.status }}
+                </span>
+
+                {% else %}
+
+                <span class="status-danger">
+                    {{ transaction.status }}
+                </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+<br>
+<!-- Action Buttons -->
+<div class="action-buttons">
+
+    <a href="{{ url_for('admin.reports') }}">
+        <i class="fas fa-file-export"></i>
+        Export Report
+    </a>
+
+    <a href="{{ url_for('admin.admindashboard') }}">
+        <i class="fas fa-arrow-left"></i>
+        Dashboard
+    </a>
+
+</div>
+
+<div class="footer">
+    © 2026 Secure Bank | Transaction Management
+</div>
+
+</div>
+</div>
+</body>
+</html>

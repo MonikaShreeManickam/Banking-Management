@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reports | Secure Bank Admin</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<!--============Logout Model==========-->
+
+<div id="logoutModal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h3>Logout</h3>
+
+        <p>Are you sure you want to logout?</p>
+
+        <div class="logout-buttons">
+
+            <button type="button"
+                    class="logout-yes"
+                    onclick="confirmLogout()">
+                Yes
+            </button>
+
+            <button type="button"
+                    class="logout-no"
+                    onclick="closeLogoutPopup()">
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<!--==========JScript for logout======-->
+
+<script>
+
+function showLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "flex";
+}
+
+function closeLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "none";
+}
+
+function confirmLogout() {
+    window.location.href = "{{ url_for('customer.logout') }}";
+}
+
+</script>
+
+<body>
+<div class="dashboard">
+<!-- Sidebar -->
+<div class="sidebar">
+<h2>💜 <span>Secure</span> Bank</h2>
+<ul>
+<li>
+    <a href="{{ url_for('admin.admindashboard') }}">
+        <i class="fas fa-home"></i> Dashboard
+    </a>
+</li>
+
+<li>
+    <a href="{{ url_for('admin.adminprofile') }}">
+        <i class="fas fa-user-shield"></i> Admin Profile
+    </a>
+</li>
+
+<li>
+    <a href="{{ url_for('admin.viewcustomers') }}">
+        <i class="fas fa-users"></i> View Customers
+    </a>
+</li>
+
+<li>
+    <a href="{{ url_for('admin.viewtransactions') }}">
+        <i class="fas fa-money-check-dollar"></i> Transactions
+    </a>
+</li>
+
+<li>
+    <a href="{{ url_for('loan.loanapplications') }}">
+        <i class="fas fa-file-signature"></i> Loan Applications
+    </a>
+</li>
+
+<li>
+    <a href="{{ url_for('admin.adminchangepassword') }}">
+        <i class="fas fa-lock"></i>
+        Change Password
+    </a>
+</li>
+
+<li class="active">
+    <a href="{{ url_for('admin.reports') }}">
+        <i class="fas fa-chart-line"></i> Reports
+    </a>
+</li>
+
+<li>
+    <a href="#" onclick="showLogoutPopup(); return false;">
+        <i class="fas fa-right-from-bracket"></i>
+        Logout
+    </a>
+</li>
+</ul>
+</div>
+<!-- Main Content -->
+<div class="main-content">
+<h1 class="page-title">
+<i class="fas fa-chart-bar"></i>
+Bank Reports
+</h1>
+<!-- Summary Cards -->
+<div class="card-container">
+<div class="card">
+<h3>Total Customers</h3>
+<h1>{{ total_customers }}</h1>
+<p>Registered Customers</p>
+</div>
+<div class="card">
+<h3>Total Accounts</h3>
+<h1>{{ active_accounts }}</h1>
+<p>Active Accounts</p>
+</div>
+<div class="card">
+<h3>Total Deposits</h3>
+<h1>{{ total_transactions }}</h1>
+<p>Current Balance</p>
+</div>
+<div class="card">
+<h3>Total Loans</h3>
+<h1>{{ total_loans }}</h1>
+<p>Loan Applications</p>
+</div>
+</div>
+<br>
+<!-- Report Filter -->
+<div class="form-section">
+<h2>Generate Report</h2>
+<form method="GET"
+      action="{{ url_for('admin.export_report') }}">
+<div class="form-row">
+<div class="form-control">
+<label>Report Type</label>
+<select>
+<select name="report_type" required>
+
+    <option value="Daily Report">
+        Daily Report
+    </option>
+
+    <option value="Weekly Report">
+        Weekly Report
+    </option>
+
+    <option value="Monthly Report">
+        Monthly Report
+    </option>
+
+    <option value="Yearly Report">
+        Yearly Report
+    </option>
+
+    <option value="Loan Report">
+        Loan Report
+    </option>
+
+    <option value="Loan Prediction Report">
+        Loan Prediction Report
+    </option>
+
+    <option value="Customer Report">
+        Customer Report
+    </option>
+
+    <option value="Account Report">
+        Account Report
+    </option>
+
+    <option value="Transaction Report">
+        Transaction Report
+    </option>
+
+</select>
+</select>
+</div>
+<div class="form-control">
+<label>Select Date</label>
+<input type="date" name="date">
+</div>
+</div>
+<br>
+<button class="save-btn" type="submit">
+<i class="fas fa-file-alt"></i>
+Generate Report
+</button>
+</form>
+</div>
+<br>
+<!-- Report Table -->
+<div class="table-box">
+<h2>Recent Reports</h2>
+<table>
+<tr>
+<th>Report ID</th>
+<th>Report Name</th>
+<th>Generated Date</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+<tr>
+<td>REP1001</td>
+<td>Daily Transaction Report</td>
+<td>08-07-2026</td>
+<td class="status-success">Completed</td>
+<td>
+<a href="#"><i class="fas fa-download"></i></a>
+</td>
+</tr>
+<tr>
+<td>REP1002</td>
+<td>Monthly Customer Report</td>
+<td>07-07-2026</td>
+<td class="status-success">Completed</td>
+<td>
+<a href="#"><i class="fas fa-download"></i></a>
+</td>
+</tr>
+<tr>
+<td>REP1003</td>
+<td>Loan Approval Report</td>
+<td>06-07-2026</td>
+<td class="status-success">Completed</td>
+<td>
+<a href="#"><i class="fas fa-download"></i></a>
+</td>
+</tr>
+<tr>
+<td>REP1004</td>
+<td>Deposit & Withdrawal Report</td>
+<td>05-07-2026</td>
+<td class="status-success">Completed</td>
+<td>
+<a href="#"><i class="fas fa-download"></i></a>
+</td>
+</tr>
+</table>
+</div>
+<br>
+<!-- Report Statistics -->
+<div class="balance-card">
+<h2>
+<i class="fas fa-chart-pie"></i>
+Report Summary
+</h2>
+<p>
+✔ Total Reports Generated : <strong>245</strong>
+</p>
+<p>
+✔ Loan Approval Rate : <strong>92%</strong>
+</p>
+<p>
+✔ Total Transactions : <strong>5,240</strong>
+</p>
+<p>
+✔ Total Active Customers : <strong>1,180</strong>
+</p>
+</div>
+<br>
+<!-- Action Buttons -->
+<div class="action-buttons">
+<a href="{{ url_for('admin.admindashboard') }}">
+    <i class="fas fa-arrow-left"></i>
+    Dashboard
+</a>
+<a href="#">
+<i class="fas fa-file-pdf"></i>
+Export PDF
+</a>
+<a href="{{ url_for('admin.export_report',
+                    report_type='Customer Report') }}">
+
+    <i class="fas fa-file-excel"></i>
+    Export Excel
+</a>
+</div>
+<!-- Footer -->
+<div class="footer">
+© 2026 Secure Bank | Reports Dashboard
+</div>
+</div>
+</div>
+</body>
+</html>

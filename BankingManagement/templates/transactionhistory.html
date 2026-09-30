@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Transaction History | Secure Bank</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+<!--============Logout Model==========-->
+
+<div id="logoutModal" class="logout-modal">
+
+    <div class="logout-box">
+
+        <h3>Logout</h3>
+
+        <p>Are you sure you want to logout?</p>
+
+        <div class="logout-buttons">
+
+            <button type="button"
+                    class="logout-yes"
+                    onclick="confirmLogout()">
+                Yes
+            </button>
+
+            <button type="button"
+                    class="logout-no"
+                    onclick="closeLogoutPopup()">
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<!--==========JScript for logout======-->
+
+<script>
+
+function showLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "flex";
+}
+
+function closeLogoutPopup() {
+    document.getElementById("logoutModal").style.display = "none";
+}
+
+function confirmLogout() {
+    window.location.href = "{{ url_for('customer.logout') }}";
+}
+
+</script>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>💜 Secure Bank</h2>
+
+        </div>
+
+        <ul>
+
+            <li>
+
+                <a href="{{ url_for('customer.dashboard') }}" class="active">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.profile') }}">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    My Profile
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.accountdetails') }}">
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                    Account Details
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('customer.fundtransfer') }}">
+
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+
+                    Fund Transfer
+
+                </a>
+
+            </li>
+
+            <li class="active">
+
+                <a href="{{ url_for('customer.transactionhistory') }}">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    Transaction History
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('loan.applyloan') }}">
+
+                    <i class="fa-solid fa-file-circle-plus"></i>
+
+                    Apply Loan
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="{{ url_for('loan.loanstatus') }}">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Loan Status
+
+                </a>
+
+            </li>
+            
+            <li>
+
+                <a href="{{ url_for('customer.changepassword') }}">
+
+                    <i class="fa-solid fa-key"></i>
+
+                    Change Password
+                    </a>
+                </li>
+
+                <li>
+                <a href="#" onclick="showLogoutPopup(); return false;">
+                    <i class="fas fa-right-from-bracket"></i>
+                    Logout
+                </a>
+            </li>
+            </ul>
+        </aside>
+
+    <!-- Main Content -->
+
+    <div class="main-content">
+
+        <h1 class="page-title">
+
+            Transaction History
+
+        </h1>
+
+        <!-- Search -->
+
+        <div class="search-box">
+
+            <i class="fas fa-search"></i>
+
+            <input
+            type="text"
+            placeholder="Search Transaction">
+
+        </div>
+
+        <br>
+
+        <!-- Summary -->
+
+        <div class="card-container">
+
+            <div class="card">
+
+                <h3>Total Transactions</h3>
+
+                <h1>{{ total_transactions }}</h1>
+
+                <p>Completed Transactions</p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Total Deposit</h3>
+
+                <h1>₹ {{ total_deposit }}</h1>
+
+                <p>Total Deposited</p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Total Withdraw</h3>
+
+                <h1>₹ {{ total_withdraw }}</h1>
+
+                <p>Total Withdrawn</p>
+
+            </div>
+
+        </div>
+
+        <!-- Table -->
+
+        <div class="table-box">
+
+            <h2>Recent Transactions</h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Transaction ID</th>
+
+                    <th>Type</th>
+
+                    <th>Amount</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+                {% if transactions %}
+
+                    {% for transaction in transactions %}
+
+                    <tr>
+
+                        <td>{{ transaction.transaction_date }}</td>
+
+                        <td>{{ transaction.transaction_id }}</td>
+
+                        <td>{% if transaction.transaction_type == 'Transfer' %}
+                            {{ transaction.description }}
+                            {% else %}
+                            {{ transaction.transaction_type }}
+                            {% endif %}
+                        </td>
+
+                        <td>₹ {{ transaction.amount }}</td>
+
+                        <td class="status-success">
+
+                            {{ transaction.status }}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="5" style="text-align:center;">
+
+                            No Transactions Found
+
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+            </table>
+
+        </div>
+
+        <br>
+
+        <!-- Buttons -->
+
+        <div class="action-buttons">
+
+            <a href="{{ url_for('customer.dashboard') }}">
+
+                <i class="fas fa-arrow-left"></i>
+
+                Dashboard
+
+            </a>
+
+            <a href="{{ url_for('customer.download_statement') }}">
+
+                <i class="fas fa-download"></i>
+
+                Download Statement
+
+            </a>
+
+        </div>
+
+        <div class="footer">
+
+            © 2026 Secure Bank | Transaction History
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verify OTP - SecureBank</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body>
+
+<div class="forgot-password-page">
+
+    <div class="forgot-password-card">
+
+        <div class="forgot-password-icon">
+            🔐
+        </div>
+
+        <h2>Verify OTP</h2>
+
+        <p class="forgot-password-text">
+            Enter the 6-digit OTP sent to your registered details.
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST"
+              action="{{ url_for('customer.verifyotp') }}">
+
+            <div class="forgot-form-group">
+                <label for="otp">Enter OTP</label>
+
+                <input type="text"
+                       id="otp"
+                       name="otp"
+                       class="forgot-input-box"
+                       maxlength="6"
+                       pattern="[0-9]{6}"
+                       inputmode="numeric"
+                       placeholder="Enter 6-digit OTP"
+                       required>
+            </div>
+
+            <button type="submit" class="forgot-verify-btn">
+                Verify OTP
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
